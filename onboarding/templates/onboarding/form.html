@@ -1,0 +1,43 @@
+<form method="post" enctype="multipart/form-data">
+  {% csrf_token %}
+
+  <h3>Personal Details</h3>
+  {{ form.as_p }}
+
+  <h3>Education Details</h3>
+  {{ edu_formset.management_form }}
+  {% for edu_form in edu_formset %}
+      {{ edu_form.as_p }}
+  {% endfor %}
+
+  <div id="work-section">
+  <h3>Work Experience</h3>
+  {{ work_formset.management_form }}
+  {% for work_form in work_formset %}
+      {{ work_form.as_p }}
+  {% endfor %}
+  </div>
+
+  <h3>Upload Documents</h3>
+  {{ doc_formset.management_form }}
+  {% for doc_form in doc_formset %}
+      {{ doc_form.as_p }}
+  {% endfor %}
+
+  <button type="submit" name="save">Save</button>
+  <button type="submit" name="submit">Submit</button>
+</form>
+
+<script>
+document.addEventListener("DOMContentLoaded", function() {
+    const workStatus = document.getElementById("id_work_status");
+    const workSection = document.getElementById("work-section");
+
+    function toggleWork() {
+        workSection.style.display = (workStatus.value === "FRESHER") ? "none" : "block";
+    }
+
+    toggleWork();
+    workStatus.addEventListener("change", toggleWork);
+});
+</script>
