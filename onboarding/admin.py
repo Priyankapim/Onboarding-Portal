@@ -2,7 +2,7 @@ from idlelib.configdialog import changes
 from tokenize import endpats
 
 from django.contrib import admin
-from .models import Candidate, Education, WorkExperience
+from .models import Candidate, Education, WorkExperience, Document
 
 @admin.register(Candidate)
 class CandidateAdmin(admin.ModelAdmin):
@@ -12,3 +12,4 @@ class CandidateAdmin(admin.ModelAdmin):
 
 admin.site.register(Education)
 admin.site.register(WorkExperience)
+admin.site.register(Document)

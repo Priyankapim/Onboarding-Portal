@@ -12,6 +12,8 @@ class CandidateForm(forms.ModelForm):
         ]
         widgets = {'date_of_birth': forms.DateInput(attrs={'type': 'date'})}
 
+
+
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         readonly_fields = ['first_name','middle_name','last_name','email','contact_number']
