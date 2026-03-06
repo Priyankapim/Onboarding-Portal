@@ -55,7 +55,6 @@ def onboarding_form(request, token):
                     cand.is_submitted = True
                 cand.save()
 
-
                 edu_instances = edu_formset.save(commit=False)
                 for obj in edu_formset.deleted_objects:
                     obj.delete()
@@ -87,3 +86,10 @@ def onboarding_form(request, token):
         'work_formset': work_formset,
         'doc_formset': doc_formset,
     })
+
+
+
+
+
+
+
