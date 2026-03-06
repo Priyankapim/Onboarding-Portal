@@ -65,6 +65,12 @@
         <!-- Education -->
         <div class="card section" id="education-section">
             <h3>Education</h3>
+            {% if edu_formset.non_form_errors %}
+            <div style="color:red; margin-bottom:10px;">
+                {{ edu_formset.non_form_errors }}
+            </div>
+            {% endif %}
+
             {{ edu_formset.management_form }}
             <div id="edu-container">
 
@@ -82,6 +88,13 @@
         <!-- Work -->
         <div class="card section" id="work-section">
             <h3>Work Experience</h3>
+
+            {% if work_formset.non_form_errors %}
+            <div style="color:red; margin-bottom:10px;">
+                {{ work_formset.non_form_errors }}
+            </div>
+            {% endif %}
+
             {{ work_formset.management_form }}
             <div id="work-container">
                 {% for form in work_formset %}
@@ -97,6 +110,13 @@
         <!-- Documents -->
         <div class="card section" id="document-section">
             <h3>Documents</h3>
+
+            {% if doc_formset.non_form_errors %}
+            <div style="color:red; margin-bottom:10px;">
+                {{ doc_formset.non_form_errors }}
+            </div>
+            {% endif %}
+
             {{ doc_formset.management_form }}
             <div id="doc-container">
                 {% for form in doc_formset %}
