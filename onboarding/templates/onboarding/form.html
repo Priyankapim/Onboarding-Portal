@@ -1,39 +1,13 @@
 
+
 <!DOCTYPE html>
-<html>
+<html lang="en">
+{% load static %}
 <head>
+    <meta charset="UTF-8">
     <title>HR Onboarding Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <style>
-        *{margin:0;padding:0;box-sizing:border-box;font-family:'Inter',sans-serif;}
-        body{background:#f4f6f9;display:flex;}
-        .sidebar{width:240px;background:#111827;min-height:100vh;padding:30px 20px;color:white;position:fixed;}
-        .sidebar h2{font-size:20px;margin-bottom:40px;text-align:center;}
-        .sidebar ul{list-style:none;}
-        .sidebar ul li{margin-bottom:10px;}
-        .sidebar ul li a{text-decoration:none;color:#cbd5e1;font-size:14px;display:block;padding:10px;border-radius:6px;transition:.3s;}
-        .sidebar ul li a:hover{background:#1f2937;color:white;}
-        .sidebar ul li a.active{background:#2563eb;color:white;}
-        .main{margin-left:260px;padding:40px;width:100%;}
-        .header{background:#111827;padding:20px 30px;border-radius:10px;box-shadow:0 5px 20px rgba(0,0,0,0.05);margin-bottom:30px;}
-        .header h1 {font-size: 22px;color:white;background:#111827;text-align: center;}
-        .card{background:white;padding:25px;border-radius:10px;margin-bottom:25px;box-shadow:0 8px 25px rgba(0,0,0,0.04);}
-        .card h3{margin-bottom:20px;font-size:16px;color:#2563eb;border-bottom:1px solid #eee;padding-bottom:10px;}
-        form p{display:flex;flex-direction:column;margin-bottom:15px;}
-        label{font-size:13px;margin-bottom:5px;color:#374151;font-weight:500;}
-        input,select,textarea{padding:9px;border:1px solid #d1d5db;border-radius:6px;font-size:13px;transition:.2s;}
-        input:focus,select:focus{border-color:#2563eb;outline:none;box-shadow:0 0 0 2px rgba(37,99,235,0.15);}
-        .btn-group{text-align:right;margin-top:20px;}
-        .btn{padding:8px 20px;font-size:13px;border-radius:6px;border:none;cursor:pointer;margin-left:10px;}
-        .btn-save{background:#9ca3af;color:white;}
-        .btn-submit{background:#2563eb;color:white;}
-        .btn-submit:hover{background:#1e40af;}
-        .btn-add{margin-top:10px;background:#2563eb;color:white;border:none;padding:6px 12px;border-radius:6px;cursor:pointer;}
-        .btn-delete{margin-top:5px;background:#ef4444;color:white;border:none;padding:4px 10px;border-radius:6px;cursor:pointer;font-size:12px;}
-        .form-row{position:relative;margin-bottom:15px;}
-        input[type=checkbox][name$="-DELETE"] { display:none; } /* hide default Django DELETE */
-        @media(max-width:900px){.sidebar{display:none;}.main{margin-left:0;}}
-    </style>
+    <link rel="stylesheet" href="{% static 'onboarding/style.css' %}">
 </head>
 <body>
 
@@ -50,7 +24,6 @@
 <div class="main">
     <div class="header">
         <h1>Employee Onboarding Form</h1>
-
     </div>
 
     <form method="post" enctype="multipart/form-data">
@@ -66,21 +39,18 @@
         <div class="card section" id="education-section">
             <h3>Education</h3>
             {% if edu_formset.non_form_errors %}
-            <div style="color:red; margin-bottom:10px;">
+            <div class="error">
                 {{ edu_formset.non_form_errors }}
             </div>
             {% endif %}
-
             {{ edu_formset.management_form }}
             <div id="edu-container">
-
                 {% for form in edu_formset %}
                 <div class="form-row">
                     {{ form.as_p }}
                     <button type="button" class="btn-delete" onclick="deleteRow(this,'education')">Delete</button>
                 </div>
                 {% endfor %}
-
             </div>
             <button type="button" class="btn-add" onclick="addRow('edu-container','education','{{ edu_formset.empty_form.as_p|escapejs }}')">+ Add Education</button>
         </div>
@@ -88,13 +58,11 @@
         <!-- Work -->
         <div class="card section" id="work-section">
             <h3>Work Experience</h3>
-
             {% if work_formset.non_form_errors %}
-            <div style="color:red; margin-bottom:10px;">
+            <div class="error">
                 {{ work_formset.non_form_errors }}
             </div>
             {% endif %}
-
             {{ work_formset.management_form }}
             <div id="work-container">
                 {% for form in work_formset %}
@@ -110,13 +78,11 @@
         <!-- Documents -->
         <div class="card section" id="document-section">
             <h3>Documents</h3>
-
             {% if doc_formset.non_form_errors %}
-            <div style="color:red; margin-bottom:10px;">
+            <div class="error">
                 {{ doc_formset.non_form_errors }}
             </div>
             {% endif %}
-
             {{ doc_formset.management_form }}
             <div id="doc-container">
                 {% for form in doc_formset %}
@@ -136,53 +102,7 @@
     </form>
 </div>
 
-<script>
-function deleteRow(btn,prefix){
-    const row = btn.closest('.form-row');
-    const deleteInput = row.querySelector(`input[name$='-DELETE']`);
-    if(deleteInput){ deleteInput.checked = true; }
-    row.style.display = 'none';
-}
-
-function addRow(containerId,prefix,emptyHtml){
-    const container = document.getElementById(containerId);
-    const totalForms = document.querySelector(`input[name='${prefix}-TOTAL_FORMS']`);
-    let count = parseInt(totalForms.value);
-    const html = emptyHtml.replace(/__prefix__/g,count);
-    const div = document.createElement('div');
-    div.classList.add('form-row');
-    div.innerHTML = html + `<button type="button" class="btn-delete" onclick="deleteRow(this,'${prefix}')">Delete</button>`;
-    container.appendChild(div);
-    totalForms.value = count+1;
-}
- 
-// Work toggle for Fresher
-const workStatus = document.getElementById("id_work_status");
-const workSection = document.getElementById("work-section");
-function toggleWork(){ if(workStatus && workSection) workSection.style.display=(workStatus.value==="FRESHER")?"none":"block"; }
-if(workStatus){ toggleWork(); workStatus.addEventListener("change",toggleWork); }
-
-// Sidebar smooth scroll
-const navLinks = document.querySelectorAll(".nav-link");
-const sections = document.querySelectorAll(".section");
-navLinks.forEach(link=>{
-    link.addEventListener("click", function(e){
-        e.preventDefault();
-        const target = document.querySelector(this.getAttribute("href"));
-        if(target) window.scrollTo({top:target.offsetTop-20, behavior:"smooth"});
-    });
-});
-window.addEventListener("scroll", ()=>{
-    let current="";
-    sections.forEach(section=>{
-        const sectionTop = section.offsetTop-120;
-        if(pageYOffset>=sectionTop) current=section.getAttribute("id");
-    });
-    navLinks.forEach(link=>link.classList.remove("active"));
-    navLinks.forEach(link=>{ if(link.getAttribute("href")==="#"+current) link.classList.add("active"); });
-});
-</script>
-
+<script src="{% static 'onboarding/app.js' %}"></script>
 </body>
 </html>
 

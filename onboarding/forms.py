@@ -28,11 +28,11 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
         fields = ['education_type', 'stream', 'percentage', 'grade', 'year_start', 'year_end']
-        #YEARS = [(y, y) for y in range(1980, 2031)]
 
+        #YEARS = [(y, y) for y in range(1980, 2031)]
         #widgets = {
         #    'year_start': forms.Select(choices=YEARS),
-         #   'year_end': forms.Select(choices=YEARS),
+        #   'year_end': forms.Select(choices=YEARS),
         #}
 
 
@@ -44,6 +44,7 @@ class WorkExperienceForm(forms.ModelForm):
             'date_joining': forms.DateInput(attrs={'type': 'date'}),
             'date_exit': forms.DateInput(attrs={'type': 'date'}),
         }
+
 
 
 class DocumentForm(forms.ModelForm):

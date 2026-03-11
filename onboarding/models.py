@@ -86,3 +86,5 @@ class Document(models.Model):
 
     def __str__(self):
         return f"{self.candidate.first_name} - {self.document_type}"
+
+
