@@ -88,3 +88,4 @@ class Document(models.Model):
         return f"{self.candidate.first_name} - {self.document_type}"
 
 
+

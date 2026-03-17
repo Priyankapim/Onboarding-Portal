@@ -46,9 +46,12 @@ class WorkExperienceForm(forms.ModelForm):
         }
 
 
-
 class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ['document_type', 'file']
+
+
+
+
 
