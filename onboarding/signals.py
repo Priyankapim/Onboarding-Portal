@@ -2,21 +2,38 @@ from django.db.models.signals import post_save
 from django.dispatch import receiver
 from django.core.mail import send_mail
 from django.conf import settings
-from .models import Candidate
+from .models import Candidate, generate_credentials
 
 
 @receiver(post_save, sender=Candidate)
 def send_onboarding_email(sender, instance, created, **kwargs):
     if created:
-        onboarding_link = f"http://127.0.0.1:8000/onboarding/form/{instance.token}/"
+
+        # generate username & password
+        username, password = generate_credentials(
+            instance.first_name,
+            instance.last_name
+        )
+
+        # save in DB
+        instance.username = username
+        instance.password = password
+        instance.save()
+
+        # login link (UPDATED)
+        onboarding_link = f"http://127.0.0.1:8000/onboarding/login/{instance.token}/"
 
         send_mail(
             subject="Complete Your Onboarding",
             message=f"""
 Hello {instance.first_name},
 
-Please complete your onboarding form using the link below:
+Your login credentials:
 
+User ID: {username}
+Password: {password}
+
+Click below to login:
 {onboarding_link}
 
 Thank you.

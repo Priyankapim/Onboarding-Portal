@@ -21,9 +21,13 @@ from django.conf import settings
 from django.conf.urls.static import static
 from onboarding import views
 
+
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('onboarding/form/<str:token>/', views.onboarding_form, name='onboarding_form')
+    # Login page
+    path('onboarding/login/<str:token>/', views.login_view, name='login_view'),
+    # Onboarding form
+    path('onboarding/form/<str:token>/', views.onboarding_form, name='onboarding_form'),
 ]
 
 

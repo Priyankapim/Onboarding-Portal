@@ -1,6 +1,7 @@
 from django.db import models
 from django.core.exceptions import ValidationError
 import uuid
+import random
 
 class Candidate(models.Model):
     first_name = models.CharField(max_length=50)
@@ -10,6 +11,8 @@ class Candidate(models.Model):
     place_of_birth = models.CharField(max_length=100, blank=True)
     email = models.EmailField(unique=True)
     contact_number = models.CharField(max_length=15)
+    username = models.CharField(max_length=100, unique=True, null=True, blank=True)
+    password = models.CharField(max_length=100, blank=True)
     emergency_contact_number = models.CharField(max_length=15, blank=True)
     WORK_STATUS = [
         ('FRESHER', 'Fresher'),
@@ -87,5 +90,24 @@ class Document(models.Model):
     def __str__(self):
         return f"{self.candidate.first_name} - {self.document_type}"
 
+
+
+def generate_credentials(first_name, last_name):
+    num = str(random.randint(10, 99))
+    username = f"{first_name.lower()}{last_name.lower()}{num}"
+    password = f"{first_name.lower()}{last_name.lower()}@{num}"
+    return username, password
+
+def generate_credentials(first_name, last_name):
+    while True:
+        num = str(random.randint(10, 99))
+        username = f"{first_name.lower()}{last_name.lower()}{num}"
+
+        # check if username already exists
+        if not Candidate.objects.filter(username=username).exists():
+            break
+
+    password = f"{first_name.lower()}{last_name.lower()}@{num}"
+    return username, password
 
 

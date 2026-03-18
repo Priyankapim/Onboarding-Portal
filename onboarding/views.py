@@ -5,10 +5,38 @@ from django.db import transaction
 from .models import Candidate, Education, WorkExperience, Document
 from .forms import CandidateForm, EducationForm, WorkExperienceForm, DocumentForm
 
+from django.shortcuts import render, get_object_or_404, redirect
+from .models import Candidate
+
+def login_view(request, token):
+    candidate = get_object_or_404(Candidate, token=token)
+
+    error = None
+
+    if request.method == "POST":
+        username = request.POST.get("username")
+        password = request.POST.get("password")
+
+        if username == candidate.username and password == candidate.password:
+            request.session['candidate_id'] = candidate.id
+            return redirect('onboarding_form', token=token)
+        else:
+            error = "Invalid User ID or Password"
+
+    return render(request, 'onboarding/login.html', {
+        'candidate': candidate,
+        'error': error
+    })
+
 
 def onboarding_form(request, token):
 
     candidate = get_object_or_404(Candidate, token=token)
+
+
+    # check login
+    if request.session.get('candidate_id') != candidate.id:
+        return redirect('login_view', token=token)
 
     if candidate.is_submitted:
         return render(request, 'onboarding/already_submitted.html', {'candidate': candidate})
