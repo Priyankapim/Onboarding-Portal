@@ -1,18 +1,13 @@
-from django.shortcuts import render, get_object_or_404, redirect
 from django.forms import inlineformset_factory, modelformset_factory
 from django.db import transaction
-
 from .models import Candidate, Education, WorkExperience, Document
-from .forms import CandidateForm, EducationForm, WorkExperienceForm, DocumentForm
-
+from .forms import CandidateForm, EducationForm, WorkExperienceForm, DocumentForm, ChangePasswordForm
 from django.shortcuts import render, get_object_or_404, redirect
-from .models import Candidate
+from django.contrib import messages
 
 def login_view(request, token):
     candidate = get_object_or_404(Candidate, token=token)
-
     error = None
-
     if request.method == "POST":
         username = request.POST.get("username")
         password = request.POST.get("password")
@@ -33,14 +28,12 @@ def onboarding_form(request, token):
 
     candidate = get_object_or_404(Candidate, token=token)
 
-
     # check login
     if request.session.get('candidate_id') != candidate.id:
         return redirect('login_view', token=token)
 
     if candidate.is_submitted:
         return render(request, 'onboarding/already_submitted.html', {'candidate': candidate})
-
 
     EducationFormSet = inlineformset_factory(
         Candidate,
@@ -82,7 +75,6 @@ def onboarding_form(request, token):
             prefix='work'
         )
 
-
         doc_formset = DocumentFormSet(
             request.POST,
             request.FILES,
@@ -90,9 +82,7 @@ def onboarding_form(request, token):
             prefix='document'
         )
 
-
         if form.is_valid() and edu_formset.is_valid() and work_formset.is_valid() and doc_formset.is_valid():
-
 
             education_types = []
 
@@ -116,15 +106,12 @@ def onboarding_form(request, token):
                     f"Please add education details for: {', '.join(missing_education)}"
                 ])
 
-
-
                 return render(request, 'onboarding/form.html', {
                     'form': form,
                     'edu_formset': edu_formset,
                     'work_formset': work_formset,
-                    'doc_formset': DocumentFormSet(request.POST, request.FILES,
-                                                   queryset=Document.objects.filter(candidate=candidate),
-                                                   prefix='document')
+                    'doc_formset': doc_formset,
+                    'candidate': candidate
                 })
 
 
@@ -155,6 +142,7 @@ def onboarding_form(request, token):
                     'edu_formset': edu_formset,
                     'work_formset': work_formset,
                     'doc_formset': doc_formset,
+                    'candidate': candidate
                 })
 
 
@@ -176,6 +164,7 @@ def onboarding_form(request, token):
                         'edu_formset': edu_formset,
                         'work_formset': work_formset,
                         'doc_formset': doc_formset,
+                        'candidate': candidate
                     })
 
 
@@ -189,6 +178,7 @@ def onboarding_form(request, token):
                         'edu_formset': edu_formset,
                         'work_formset': work_formset,
                         'doc_formset': doc_formset,
+                        'candidate': candidate
                     })
 
 
@@ -260,5 +250,46 @@ def onboarding_form(request, token):
         'edu_formset': edu_formset,
         'work_formset': work_formset,
         'doc_formset': doc_formset,
+        'candidate': candidate
+    })
+
+def logout_view(request, token):
+    request.session.flush()
+    return redirect('login_view', token=token)
+
+
+def change_password(request, token):
+
+    candidate = get_object_or_404(Candidate, token=token)
+
+    if request.session.get('candidate_id') != candidate.id:
+        return redirect('login_view', token=token)
+
+    form = ChangePasswordForm()
+
+    if request.method == 'POST':
+        form = ChangePasswordForm(request.POST)
+
+        if form.is_valid():
+            old = form.cleaned_data['old_password']
+            new = form.cleaned_data['new_password']
+            confirm = form.cleaned_data['confirm_password']
+
+            if old != candidate.password:
+                form.add_error('old_password', "Wrong old password")
+
+            elif new != confirm:
+                form.add_error('confirm_password', "Passwords do not match")
+
+            else:
+                candidate.password = new
+                candidate.save()
+                messages.success(request, "Password updated successfully")
+                return redirect('onboarding_form', token=token)
+
+    return render(request, 'onboarding/change_password.html', {
+        'form': form,
+        'token': token,
+        'candidate': candidate
     })
 

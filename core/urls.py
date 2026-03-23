@@ -16,7 +16,6 @@ Including another URLconf
 """
 from django.contrib import admin
 from django.urls import path
-
 from django.conf import settings
 from django.conf.urls.static import static
 from onboarding import views
@@ -24,10 +23,10 @@ from onboarding import views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    # Login page
     path('onboarding/login/<str:token>/', views.login_view, name='login_view'),
-    # Onboarding form
     path('onboarding/form/<str:token>/', views.onboarding_form, name='onboarding_form'),
+    path('logout/<str:token>/', views.logout_view, name='logout_view'),
+    path('change-password/<str:token>/', views.change_password, name='change_password'),
 ]
 
 

@@ -1,13 +1,14 @@
 from django import forms
 from .models import Candidate, Education, WorkExperience, Document
 
+
 class CandidateForm(forms.ModelForm):
     class Meta:
         model = Candidate
         fields = [
             'first_name','middle_name','last_name',
             'date_of_birth','place_of_birth',
-            'email','contact_number','emergency_contact_number',
+            'email','address', 'contact_number','emergency_contact_number',
             'work_status'
         ]
         widgets = {'date_of_birth': forms.DateInput(attrs={'type': 'date'})}
@@ -15,11 +16,13 @@ class CandidateForm(forms.ModelForm):
     def __init__(self,*args,**kwargs):
         super().__init__(*args,**kwargs)
 
-        readonly_fields = ['first_name','middle_name','last_name','email','contact_number']
+        readonly_fields = ['first_name','last_name','email','contact_number']
         for field in readonly_fields:
             self.fields[field].widget.attrs['readonly'] = True
 
         # make mandatory
+        self.fields['address'].required = True
+        self.fields['middle_name'].required = True
         self.fields['date_of_birth'].required = True
         self.fields['place_of_birth'].required = True
         self.fields['emergency_contact_number'].required = True
@@ -50,6 +53,13 @@ class DocumentForm(forms.ModelForm):
     class Meta:
         model = Document
         fields = ['document_type', 'file']
+
+
+
+class ChangePasswordForm(forms.Form):
+    old_password = forms.CharField(widget=forms.PasswordInput)
+    new_password = forms.CharField(widget=forms.PasswordInput)
+    confirm_password = forms.CharField(widget=forms.PasswordInput)
 
 
 

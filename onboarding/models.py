@@ -10,6 +10,7 @@ class Candidate(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     place_of_birth = models.CharField(max_length=100, blank=True)
     email = models.EmailField(unique=True)
+    address = models.CharField(max_length=100, blank=True)
     contact_number = models.CharField(max_length=15)
     username = models.CharField(max_length=100, unique=True, null=True, blank=True)
     password = models.CharField(max_length=100, blank=True)

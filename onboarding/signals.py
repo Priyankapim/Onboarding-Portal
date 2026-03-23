@@ -9,7 +9,7 @@ from .models import Candidate, generate_credentials
 def send_onboarding_email(sender, instance, created, **kwargs):
     if created:
 
-        # generate username & password
+
         username, password = generate_credentials(
             instance.first_name,
             instance.last_name
@@ -20,7 +20,7 @@ def send_onboarding_email(sender, instance, created, **kwargs):
         instance.password = password
         instance.save()
 
-        # login link (UPDATED)
+
         onboarding_link = f"http://127.0.0.1:8000/onboarding/login/{instance.token}/"
 
         send_mail(

@@ -5,39 +5,80 @@
     <meta charset="UTF-8">
     <title>HR Onboarding Portal</title>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="{% static 'onboarding/style.css' %}">
+    <link rel="stylesheet" href="{% static 'onboarding/styles.css' %}">
 </head>
 <body>
+<div class="top-header">
+    <div class="left">
+        <img src="{% static 'onboarding/img_1.png' %}" class="logo">
+        <span class="portal-name">Onboarding Portal</span>
+    </div>
 
-<div class="sidebar">
+    <div class="right">
+        <span class="username">
+            😊 {{ candidate.username }}
+        </span>
+        <a href="{% url 'change_password' token=candidate.token %}" class="change-password">Change Password</a>
+        <a href="{% url 'logout_view' token=candidate.token %}" class="logout">Logout</a>
+    </div>
+</div>
 
-    <img src="{% static 'onboarding/img.png' %}" style="width:30px;height:30px;vertical-align:middle;">
-    <h2 style="display:inline-block; margin-left:10px;">Portal</h2>
+<div class="sidebar" id="sidebar">
 
+    <div class="sidebar-header">
+        <button id="menu-toggle" class="menu-btn">☰</button>
+    </div>
 
-    <!-- <h2>Portal</h2> -->
-    <ul>
-        <li><a href="#personal-section" class="nav-link active">Personal Info</a></li>
-        <li><a href="#education-section" class="nav-link">Education</a></li>
-        <li><a href="#work-section" class="nav-link">Work Experience</a></li>
-        <li><a href="#document-section" class="nav-link">Documents</a></li>
+    <ul class="menu">
+        <li><a href="#personal-section" class="nav-link active">👤 Personal</a></li>
+        <li><a href="#education-section" class="nav-link">🎓 Education</a></li>
+        <li><a href="#work-section" class="nav-link">💼 Work</a></li>
+        <li><a href="#document-section" class="nav-link">📄 Documents</a></li>
     </ul>
+
 </div>
 
 <div class="main">
-    <div class="header">
-        <h1>Employee Onboarding Form</h1>
-    </div>
-
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
+
+    <!--    <div class="card section" id="personal-section">
+            <h3>Personal Details</h3>
+            {{ form.as_p }}
+        </div> -->
 
         <!-- Personal -->
         <div class="card section" id="personal-section">
             <h3>Personal Details</h3>
-            {{ form.as_p }}
-        </div>
+            <div class="form-grid">
+                <!-- Row 1 -->
+                <div class="row">
+                    <div class="field">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+                    <div class="field">{{ form.middle_name.label_tag }} {{ form.middle_name }}</div>
+                    <div class="field">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
+                </div>
 
+                <!-- Row 2 -->
+                <div class="row">
+                    <div class="field">{{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}</div>
+                    <div class="field">{{ form.place_of_birth.label_tag }} {{ form.place_of_birth }}</div>
+                    <div class="field">{{ form.email.label_tag }} {{ form.email }}</div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row">
+                    <div class="field">{{ form.address.label_tag }} {{ form.address }}</div>
+                    <div class="field">{{ form.contact_number.label_tag }} {{ form.contact_number }}</div>
+                    <div class="field">{{ form.emergency_contact_number.label_tag }} {{ form.emergency_contact_number }}</div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row">
+                    <div class="field full">{{ form.work_status.label_tag }} {{ form.work_status }}</div>
+                </div>
+
+            </div>
+        </div>
 
         <!-- Education -->
         <div class="card section" id="education-section">
@@ -52,7 +93,9 @@
                 {% for form in edu_formset %}
                 <div class="form-row">
                     {{ form.as_p }}
+                    {{ form.as_id }}
                     <button type="button" class="btn-delete" onclick="deleteRow(this,'education')">Delete</button>
+
                 </div>
                 {% endfor %}
             </div>
@@ -106,8 +149,8 @@
     </form>
 </div>
 
-<script src="{% static 'onboarding/app.js' %}"></script>
 </body>
+<script src="{% static 'onboarding/apps.js' %}"></script>
 </html>
 
 

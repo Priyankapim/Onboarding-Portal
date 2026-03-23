@@ -1,27 +1,183 @@
 <!DOCTYPE html>
+{% load static %}
 <html>
 <head>
     <title>Login</title>
+
+    <style>
+
+        body {
+            margin: 0;
+            padding: 0;
+            font-family: 'Segoe UI', sans-serif;
+            height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background: linear-gradient(135deg, #111827, #1e3a8a);
+        }
+
+        .login-container {
+            background: #ffffff;
+            padding: 35px;
+            width: 350px;
+            border-radius: 12px;
+            box-shadow: 0 15px 35px rgba(0,0,0,0.4);
+            text-align: center;
+            animation: fadeIn 0.6s ease-in-out;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        h2 {
+            margin-bottom: 10px;
+            color: #111827;
+        }
+
+        .welcome-text {
+            font-size: 14px;
+            color: #6b7280;
+            margin-bottom: 20px;
+        }
+
+        label {
+            display: block;
+            text-align: left;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #374151;
+        }
+
+        input {
+            width: 100%;
+            padding: 10px;
+            margin-top: 6px;
+            border-radius: 6px;
+            border: 1px solid #d1d5db;
+            outline: none;
+            transition: 0.3s;
+        }
+
+        input:focus {
+            border-color: #1e3a8a;
+            box-shadow: 0 0 6px rgba(30,58,138,0.3);
+        }
+
+        button {
+            width: 100%;
+            padding: 11px;
+            margin-top: 25px;
+            background: #1e3a8a;
+            border: none;
+            color: white;
+            font-size: 16px;
+            border-radius: 6px;
+            cursor: pointer;
+            transition: 0.3s;
+        }
+
+        button:hover {
+            background: #2563eb;
+        }
+
+        .error {
+            color: red;
+            margin-top: 12px;
+            font-size: 14px;
+        }
+
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #111827;
+        }
+
+
+        .top-bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 60px;
+            background: #111827;
+            display: flex;
+            align-items: center;
+            padding: 0 20px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.3);
+            z-index: 1000;
+        }
+
+
+        .top-bar .left {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+
+        .logo {
+            height: 35px;
+            width: 35px;
+            object-fit: contain;
+        }
+
+
+        .portal-name {
+            color: #ffffff;
+            font-size: 18px;
+            font-weight: 600;
+        }
+
+    </style>
 </head>
+
 <body>
 
-<h2>Welcome {{ candidate.first_name }}</h2>
+<div class="top-bar">
+    <div class="left">
+        <img src="{% static 'onboarding/img.png' %}" class="logo">
+        <span class="portal-name">Onboarding Portal</span>
+    </div>
+</div>
 
-<form method="post">
-    {% csrf_token %}
 
-    <label>User ID:</label>
-    <input type="text" name="username" required>
 
-    <label>Password:</label>
-    <input type="password" name="password" required>
+<div class="login-container">
+    <h2>Login</h2>
 
-    <button type="submit">Login</button>
+    <div class="welcome-text">
+        Welcome {{ candidate.first_name }}
+    </div>
 
-    {% if error %}
-        <p style="color:red;">{{ error }}</p>
-    {% endif %}
-</form>
+    <form method="post">
+        {% csrf_token %}
+
+        <label>User ID</label>
+        <input type="text" name="username" placeholder="Enter your user ID" required>
+
+        <label>Password</label>
+        <input type="password" name="password" placeholder="Enter your password" required>
+
+        <button type="submit">Login</button>
+
+        {% if error %}
+            <div class="error">{{ error }}</div>
+        {% endif %}
+    </form>
+</div>
 
 </body>
 </html>
