@@ -17,6 +17,8 @@ function addRow(containerId,prefix,emptyHtml){
     totalForms.value = count+1;
 }
 
+
+
 // Work toggle for Fresher
 const workStatus = document.getElementById("id_work_status");
 const workSection = document.getElementById("work-section");
@@ -33,6 +35,7 @@ navLinks.forEach(link=>{
         if(target) window.scrollTo({top:target.offsetTop-20, behavior:"smooth"});
     });
 });
+
 window.addEventListener("scroll", ()=>{
     let current="";
     sections.forEach(section=>{
@@ -42,3 +45,16 @@ window.addEventListener("scroll", ()=>{
     navLinks.forEach(link=>link.classList.remove("active"));
     navLinks.forEach(link=>{ if(link.getAttribute("href")==="#"+current) link.classList.add("active"); });
 });
+
+// Sidebar toggle
+const toggleBtn = document.getElementById("menu-toggle");
+const sidebar = document.getElementById("sidebar");
+const main = document.querySelector(".main");
+
+toggleBtn.addEventListener("click", () => {
+    sidebar.classList.toggle("closed");
+    main.classList.toggle("full");
+});
+
+
+
