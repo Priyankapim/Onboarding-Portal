@@ -1,6 +1,3 @@
-from idlelib.configdialog import changes
-from tokenize import endpats
-
 
 #Admin
 #Admin@123

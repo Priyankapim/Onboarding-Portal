@@ -1,1 +1,1 @@
-web: gunicorn PythonProject_OnboardingForm.wsgi
+web: gunicorn core.wsgi
