@@ -42,7 +42,7 @@
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
-    <!--    <div class="card section" id="personal-section">
+    <!--<div class="card section" id="personal-section">
             <h3>Personal Details</h3>
             {{ form.as_p }}
         </div> -->
@@ -51,30 +51,28 @@
         <div class="card section" id="personal-section">
             <h3>Personal Details</h3>
             <div class="form-grid">
-                <!-- Row 1 -->
+
                 <div class="row">
                     <div class="field">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
                     <div class="field">{{ form.middle_name.label_tag }} {{ form.middle_name }}</div>
                     <div class="field">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
                 </div>
 
-                <!-- Row 2 -->
                 <div class="row">
                     <div class="field">{{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}</div>
                     <div class="field">{{ form.place_of_birth.label_tag }} {{ form.place_of_birth }}</div>
                     <div class="field">{{ form.email.label_tag }} {{ form.email }}</div>
                 </div>
 
-                <!-- Row 3 -->
                 <div class="row">
-                    <div class="field">{{ form.address.label_tag }} {{ form.address }}</div>
+
+                    <div class="field full">{{ form.work_status.label_tag }} {{ form.work_status }}</div>
                     <div class="field">{{ form.contact_number.label_tag }} {{ form.contact_number }}</div>
                     <div class="field">{{ form.emergency_contact_number.label_tag }} {{ form.emergency_contact_number }}</div>
                 </div>
 
-                <!-- Row 4 -->
                 <div class="row">
-                    <div class="field full">{{ form.work_status.label_tag }} {{ form.work_status }}</div>
+                    <div class="field">{{ form.address.label_tag }} {{ form.address }}</div>
                 </div>
 
             </div>
