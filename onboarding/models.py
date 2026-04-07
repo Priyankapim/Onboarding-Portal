@@ -1,3 +1,4 @@
+from django.contrib.auth.password_validation import password_changed
 from django.db import models
 from django.core.exceptions import ValidationError
 import uuid
@@ -95,14 +96,15 @@ class Document(models.Model):
 
 def generate_credentials(first_name, last_name):
     num = str(random.randint(10, 99))
-    username = f"{first_name.lower()}{last_name.lower()}{num}"
+    username = f"{first_name.lower()}{last_name[0].upper()}{num}"
     password = f"{first_name.lower()}{last_name.lower()}@{num}"
     return username, password
 
 def generate_credentials(first_name, last_name):
     while True:
         num = str(random.randint(10, 99))
-        username = f"{first_name.lower()}{last_name.lower()}{num}"
+        username = f"{first_name.lower()}{last_name[0].upper()}{num}"
+
 
         # check if username already exists
         if not Candidate.objects.filter(username=username).exists():
@@ -110,5 +112,14 @@ def generate_credentials(first_name, last_name):
 
     password = f"{first_name.lower()}{last_name.lower()}@{num}"
     return username, password
+
+
+
+
+
+
+
+
+
 
 

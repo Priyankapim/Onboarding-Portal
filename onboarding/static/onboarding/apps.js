@@ -17,8 +17,6 @@ function addRow(containerId,prefix,emptyHtml){
     totalForms.value = count+1;
 }
 
-
-
 // Work toggle for Fresher
 const workStatus = document.getElementById("id_work_status");
 const workSection = document.getElementById("work-section");
@@ -32,7 +30,7 @@ navLinks.forEach(link=>{
     link.addEventListener("click", function(e){
         e.preventDefault();
         const target = document.querySelector(this.getAttribute("href"));
-        if(target) window.scrollTo({top:target.offsetTop-20, behavior:"smooth"});
+        if(target) window.scrollTo({top:target.offsetTop-80, behavior:"smooth"});
     });
 });
 
@@ -52,7 +50,7 @@ const sidebar = document.getElementById("sidebar");
 const main = document.querySelector(".main");
 
 toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("closed");
+    sidebar.classList.toggle("open");
     main.classList.toggle("full");
 });
 

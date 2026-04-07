@@ -1,4 +1,4 @@
-
+#https://onboarding-portal-04u0.onrender.com
 #Admin
 #Admin@123
 from django.contrib import admin
@@ -12,3 +12,7 @@ class CandidateAdmin(admin.ModelAdmin):
 admin.site.register(Education)
 admin.site.register(WorkExperience)
 admin.site.register(Document)
+
+
+
+

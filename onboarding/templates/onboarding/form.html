@@ -11,35 +11,71 @@
 <body>
 <div class="top-header">
     <div class="left">
-        <img src="{% static 'onboarding/img_1.png' %}" class="logo">
+        <img src="{% static 'onboarding/img_2.png' %}" class="logo">
         <span class="portal-name">Onboarding Portal</span>
     </div>
 
     <div class="right">
         <span class="username">
-            😊 {{ candidate.username }}
+            👤 {{ candidate.username }}
         </span>
-        <a href="{% url 'change_password' token=candidate.token %}" class="change-password">Change Password</a>
-        <a href="{% url 'logout_view' token=candidate.token %}" class="logout">Logout</a>
+
     </div>
 </div>
 
 <div class="sidebar" id="sidebar">
 
-    <div class="sidebar-header">
+<!--    <div class="sidebar-header">
         <button id="menu-toggle" class="menu-btn">☰</button>
-    </div>
+    </div> -->
 
     <ul class="menu">
-        <li><a href="#personal-section" class="nav-link active">👤 Personal</a></li>
-        <li><a href="#education-section" class="nav-link">🎓 Education</a></li>
-        <li><a href="#work-section" class="nav-link">💼 Work</a></li>
-        <li><a href="#document-section" class="nav-link">📄 Documents</a></li>
-    </ul>
+        <li>
+            <a href="#personal-section" class="nav-link active" data-title="Personal">
+                <span class="icon">👤</span>
+                <span class="text">Personal</span>
+            </a>
+        </li>
 
+        <li>
+            <a href="#education-section" class="nav-link" data-title="Education">
+                <span class="icon">🎓</span>
+                <span class="text">Education</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#work-section" class="nav-link" data-title="Work">
+                <span class="icon">💼</span>
+                <span class="text">Work</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="#document-section" class="nav-link" data-title="Documents">
+                <span class="icon">📄</span>
+                <span class="text">Documents</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'change_password' token=candidate.token %}" data-title="Change Password">
+                <span class="icon">🔑</span>
+                <span class="text">Change Password</span>
+            </a>
+        </li>
+
+        <li>
+            <a href="{% url 'logout_view' token=candidate.token %}" data-title="Logout">
+                <span class="icon">🚪</span>
+                <span class="text">Logout</span>
+            </a>
+        </li>
+    </ul>
 </div>
 
 <div class="main">
+    <div class="form-container">
     <form method="post" enctype="multipart/form-data">
         {% csrf_token %}
 
@@ -67,13 +103,13 @@
 
                 <div class="row">
 
-                    <div class="field full">{{ form.work_status.label_tag }} {{ form.work_status }}</div>
+                    <div class="field">{{ form.work_status.label_tag }} {{ form.work_status }}</div>
                     <div class="field">{{ form.contact_number.label_tag }} {{ form.contact_number }}</div>
                     <div class="field">{{ form.emergency_contact_number.label_tag }} {{ form.emergency_contact_number }}</div>
                 </div>
 
                 <div class="row">
-                    <div class="field">{{ form.address.label_tag }} {{ form.address }}</div>
+                    <div class="field full">{{ form.address.label_tag }} {{ form.address }}</div>
                 </div>
 
             </div>
@@ -146,6 +182,7 @@
             <button type="submit" name="submit" class="btn btn-submit">Submit Application</button>
         </div>
     </form>
+    <div>
 </div>
 
 </body>
