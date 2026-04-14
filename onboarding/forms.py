@@ -8,24 +8,47 @@ class CandidateForm(forms.ModelForm):
         fields = [
             'first_name','middle_name','last_name',
             'date_of_birth','place_of_birth',
-            'email','address', 'contact_number','emergency_contact_number',
+            'email','address','contact_number','emergency_contact_number',
             'work_status'
         ]
         widgets = {'date_of_birth': forms.DateInput(attrs={'type': 'date'})}
 
-    def __init__(self,*args,**kwargs):
-        super().__init__(*args,**kwargs)
+    def __init__(self, *args, **kwargs):
+        self.is_submit = kwargs.pop('is_submit', False)
+        super().__init__(*args, **kwargs)
 
-        readonly_fields = ['first_name','last_name','email','contact_number']
+        # readonly fields
+        readonly_fields = ['first_name', 'last_name', 'email', 'contact_number']
         for field in readonly_fields:
             self.fields[field].widget.attrs['readonly'] = True
 
-        # make mandatory
-        self.fields['address'].required = True
-        self.fields['middle_name'].required = True
-        self.fields['date_of_birth'].required = True
-        self.fields['place_of_birth'].required = True
-        self.fields['emergency_contact_number'].required = True
+        if not self.is_submit:
+            # SAVE DRAFT → no required fields
+            for field in self.fields.values():
+                field.required = False
+        else:
+            # SUBMIT → required fields
+            required_fields = [
+                'address',
+                'middle_name',
+                'date_of_birth',
+                'place_of_birth',
+                'emergency_contact_number'
+            ]
+            for field in required_fields:
+                self.fields[field].required = True
+
+    def is_valid(self):
+        valid = super().is_valid()
+
+        if self.is_submit:  # only on submit
+            for field in self.fields:
+                if self.errors.get(field):
+                    existing_class = self.fields[field].widget.attrs.get('class', '')
+                    self.fields[field].widget.attrs['class'] = existing_class + ' error'
+
+        return valid
+
 
 class EducationForm(forms.ModelForm):
     class Meta:

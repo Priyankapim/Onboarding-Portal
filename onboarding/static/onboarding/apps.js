@@ -49,9 +49,27 @@ const toggleBtn = document.getElementById("menu-toggle");
 const sidebar = document.getElementById("sidebar");
 const main = document.querySelector(".main");
 
-toggleBtn.addEventListener("click", () => {
-    sidebar.classList.toggle("open");
-    main.classList.toggle("full");
+if (toggleBtn) {
+    toggleBtn.addEventListener("click", () => {
+        sidebar.classList.toggle("open");
+        main.classList.toggle("full");
+    });
+}
+
+
+document.addEventListener("DOMContentLoaded", () => {
+
+    const alerts = document.querySelectorAll('.alert');
+
+    if (alerts.length > 0) {
+        setTimeout(() => {
+            alerts.forEach(el => {
+                el.style.opacity = '0';
+                setTimeout(() => el.remove(), 300);
+            });
+        }, 5000);
+    }
+
 });
 
 

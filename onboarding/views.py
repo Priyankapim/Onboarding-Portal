@@ -58,10 +58,12 @@ def onboarding_form(request, token):
         can_delete=True
     )
 
-
     if request.method == 'POST':
 
-        form = CandidateForm(request.POST, instance=candidate)
+
+        is_submit = 'submit' in request.POST
+
+        form = CandidateForm(request.POST, instance=candidate, is_submit=is_submit)
 
         edu_formset = EducationFormSet(
             request.POST,
@@ -82,148 +84,144 @@ def onboarding_form(request, token):
             prefix='document'
         )
 
-        if form.is_valid() and edu_formset.is_valid() and work_formset.is_valid() and doc_formset.is_valid():
+        if not is_submit:
 
-            education_types = []
+            form.save()
+            edu_formset.save()
+            work_formset.save()
+            doc_formset.save()
 
-            for edu in edu_formset.cleaned_data:
-                if edu and not edu.get('DELETE', False):
-                    education_types.append(edu.get('education_type'))
-
-            missing_education = []
-
-            if 'SSC' not in education_types:
-                missing_education.append("SSC")
-
-            if 'HSC' not in education_types:
-                missing_education.append("HSC")
-
-            if 'BACHELOR' not in education_types:
-                missing_education.append("Bachelor")
-
-            if missing_education:
-                edu_formset._non_form_errors = edu_formset.error_class([
-                    f"Please add education details for: {', '.join(missing_education)}"
-                ])
-
-                return render(request, 'onboarding/form.html', {
-                    'form': form,
-                    'edu_formset': edu_formset,
-                    'work_formset': work_formset,
-                    'doc_formset': doc_formset,
-                    'candidate': candidate
-                })
-
-
-            doc_types = []
-
-            for doc in doc_formset.cleaned_data:
-                if doc and not doc.get('DELETE', False):
-                    doc_types.append(doc.get('document_type'))
-
-            missing_docs = []
-
-            if 'EDUCATION' not in doc_types:
-                missing_docs.append("Education Certificate")
-
-            if 'ID_PROOF' not in doc_types:
-                missing_docs.append("ID Proof")
-
-            if 'PHOTO' not in doc_types:
-                missing_docs.append("Photo")
-
-            if missing_docs:
-                doc_formset._non_form_errors = doc_formset.error_class([
-                    f"Please upload required documents: {', '.join(missing_docs)}"
-                ])
-
-                return render(request, 'onboarding/form.html', {
-                    'form': form,
-                    'edu_formset': edu_formset,
-                    'work_formset': work_formset,
-                    'doc_formset': doc_formset,
-                    'candidate': candidate
-                })
-
-
-            if form.cleaned_data.get('work_status') == 'EXPERIENCED':
-
-                has_experience = False
-
-                for work in work_formset.cleaned_data:
-                    if work and not work.get('DELETE', False):
-                        has_experience = True
-
-                if not has_experience:
-                    work_formset._non_form_errors = work_formset.error_class([
-                        "Please add your work experience details."
-                    ])
-
-                    return render(request, 'onboarding/form.html', {
-                        'form': form,
-                        'edu_formset': edu_formset,
-                        'work_formset': work_formset,
-                        'doc_formset': doc_formset,
-                        'candidate': candidate
-                    })
-
-
-                if 'WORK' not in doc_types:
-                    doc_formset._non_form_errors = doc_formset.error_class([
-                        "Please upload work experience certificate."
-                    ])
-
-                    return render(request, 'onboarding/form.html', {
-                        'form': form,
-                        'edu_formset': edu_formset,
-                        'work_formset': work_formset,
-                        'doc_formset': doc_formset,
-                        'candidate': candidate
-                    })
-
-
-
-            with transaction.atomic():
-
-                cand = form.save(commit=False)
-
-                if 'submit' in request.POST:
-                    cand.is_submitted = True
-
-                cand.save()
-
-
-                edu_instances = edu_formset.save(commit=False)
-
-                for obj in edu_formset.deleted_objects:
-                    obj.delete()
-
-                for edu in edu_instances:
-                    edu.candidate = cand
-                    edu.save()
-
-
-                work_instances = work_formset.save(commit=False)
-
-                for obj in work_formset.deleted_objects:
-                    obj.delete()
-
-                for work in work_instances:
-                    work.candidate = cand
-                    work.save()
-
-
-                doc_instances = doc_formset.save(commit=False)
-
-                for obj in doc_formset.deleted_objects:
-                    obj.delete()
-
-                for doc in doc_instances:
-                    doc.candidate = cand
-                    doc.save()
-
-
+            messages.success(request, "Draft saved successfully")
             return redirect('onboarding_form', token=candidate.token)
+
+
+        else:
+
+            if form.is_valid() and edu_formset.is_valid() and work_formset.is_valid() and doc_formset.is_valid():
+
+                #education validation
+                education_types = []
+
+                for edu in edu_formset.cleaned_data:
+                    if edu and not edu.get('DELETE', False):
+                        education_types.append(edu.get('education_type'))
+
+                missing_education = []
+
+                if 'SSC' not in education_types:
+                    missing_education.append("SSC")
+
+                if 'HSC' not in education_types:
+                    missing_education.append("HSC")
+
+                if 'BACHELOR' not in education_types:
+                    missing_education.append("Bachelor")
+
+                if missing_education:
+                    edu_formset._non_form_errors = edu_formset.error_class([
+                        f"Please add education details for: {', '.join(missing_education)}"
+                    ])
+                    return render(request, 'onboarding/form.html', {
+                        'form': form,
+                        'edu_formset': edu_formset,
+                        'work_formset': work_formset,
+                        'doc_formset': doc_formset,
+                        'candidate': candidate
+                    })
+
+                #document validation
+                doc_types = []
+
+                for doc in doc_formset.cleaned_data:
+                    if doc and not doc.get('DELETE', False):
+                        doc_types.append(doc.get('document_type'))
+
+                missing_docs = []
+
+                if 'EDUCATION' not in doc_types:
+                    missing_docs.append("Education Certificate")
+
+                if 'ID_PROOF' not in doc_types:
+                    missing_docs.append("ID Proof")
+
+                if 'PHOTO' not in doc_types:
+                    missing_docs.append("Photo")
+
+                if missing_docs:
+                    doc_formset._non_form_errors = doc_formset.error_class([
+                        f"Please upload required documents: {', '.join(missing_docs)}"
+                    ])
+                    return render(request, 'onboarding/form.html', {
+                        'form': form,
+                        'edu_formset': edu_formset,
+                        'work_formset': work_formset,
+                        'doc_formset': doc_formset,
+                        'candidate': candidate
+                    })
+
+                #work validation
+                if form.cleaned_data.get('work_status') == 'EXPERIENCED':
+
+                    has_experience = False
+
+                    for work in work_formset.cleaned_data:
+                        if work and not work.get('DELETE', False):
+                            has_experience = True
+
+                    if not has_experience:
+                        work_formset._non_form_errors = work_formset.error_class([
+                            "Please add your work experience details."
+                        ])
+                        return render(request, 'onboarding/form.html', {
+                            'form': form,
+                            'edu_formset': edu_formset,
+                            'work_formset': work_formset,
+                            'doc_formset': doc_formset,
+                            'candidate': candidate
+                        })
+
+                    if 'WORK' not in doc_types:
+                        doc_formset._non_form_errors = doc_formset.error_class([
+                            "Please upload work experience certificate."
+                        ])
+                        return render(request, 'onboarding/form.html', {
+                            'form': form,
+                            'edu_formset': edu_formset,
+                            'work_formset': work_formset,
+                            'doc_formset': doc_formset,
+                            'candidate': candidate
+                        })
+
+                #save all
+                with transaction.atomic():
+
+                    cand = form.save(commit=False)
+                    cand.is_submitted = True
+                    cand.save()
+
+                    edu_instances = edu_formset.save(commit=False)
+                    for obj in edu_formset.deleted_objects:
+                        obj.delete()
+                    for edu in edu_instances:
+                        edu.candidate = cand
+                        edu.save()
+
+                    work_instances = work_formset.save(commit=False)
+                    for obj in work_formset.deleted_objects:
+                        obj.delete()
+                    for work in work_instances:
+                        work.candidate = cand
+                        work.save()
+
+                    doc_instances = doc_formset.save(commit=False)
+                    for obj in doc_formset.deleted_objects:
+                        obj.delete()
+                    for doc in doc_instances:
+                        doc.candidate = cand
+                        doc.save()
+
+                messages.success(request, "Form submitted successfully")
+                return redirect('onboarding_form', token=candidate.token)
 
     else:
 
@@ -243,7 +241,6 @@ def onboarding_form(request, token):
             queryset=Document.objects.filter(candidate=candidate),
             prefix='document'
         )
-
 
     return render(request, 'onboarding/form.html', {
         'form': form,
