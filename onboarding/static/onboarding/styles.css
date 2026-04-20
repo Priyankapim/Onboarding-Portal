@@ -121,7 +121,7 @@ body{
     text-decoration: none;
     color:   #1e293b;
     font-size: 12px;
-    padding: 12px;
+    padding: 10px;
     border-radius: 8px;
     display: flex;
     align-items: center;
@@ -133,7 +133,6 @@ body{
 .sidebar ul li a:hover {
     background: rgba(255,255,255,0.5);
     color: white;
-
 }
 
 .sidebar ul li a.active {
@@ -294,6 +293,7 @@ body{
 }
 
 .form-row p {
+    text-transform: capitalize;
     font-size: 10px;
     display: inline-block;
     width: 32%;
@@ -371,6 +371,7 @@ input[type="file"]::file-selector-button:hover {
 }
 
 label{
+    text-transform: capitalize;
     font-size:13px;
     margin-bottom:6px;
     color:#6b7280;

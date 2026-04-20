@@ -105,7 +105,6 @@ def onboarding_form(request, token):
                 for edu in edu_formset.cleaned_data:
                     if edu and not edu.get('DELETE', False):
                         education_types.append(edu.get('education_type'))
-
                 missing_education = []
 
                 if 'SSC' not in education_types:
