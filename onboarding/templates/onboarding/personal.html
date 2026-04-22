@@ -1,0 +1,40 @@
+{% extends 'onboarding/base.html' %}
+
+{% block content %}
+
+<h2>Step 1: Personal</h2>
+
+<form method="post">
+    {% csrf_token %}
+    <div class="form-grid">
+
+    <div class="row">
+        <div class="field">{{ form.first_name.label_tag }} {{ form.first_name }}</div>
+        <div class="field">{{ form.middle_name.label_tag }} {{ form.middle_name }}</div>
+        <div class="field">{{ form.last_name.label_tag }} {{ form.last_name }}</div>
+    </div>
+
+    <div class="row">
+        <div class="field">{{ form.date_of_birth.label_tag }} {{ form.date_of_birth }}</div>
+        <div class="field">{{ form.place_of_birth.label_tag }} {{ form.place_of_birth }}</div>
+        <div class="field">{{ form.email.label_tag }} {{ form.email }}</div>
+    </div>
+
+    <div class="row">
+        <div class="field">{{ form.work_status.label_tag }} {{ form.work_status }}</div>
+        <div class="field">{{ form.contact_number.label_tag }} {{ form.contact_number }}</div>
+        <div class="field">{{ form.emergency_contact_number.label_tag }} {{ form.emergency_contact_number }}</div>
+    </div>
+
+    <div class="row">
+        <div class="field full">{{ form.address.label_tag }} {{ form.address }}</div>
+    </div>
+
+</div>
+
+    <button type="submit" name="save">Save</button>
+    <button type="submit" name="next">Save & Next</button>
+</form>
+{% endblock %}
+
+

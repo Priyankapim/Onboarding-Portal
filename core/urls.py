@@ -27,6 +27,11 @@ urlpatterns = [
     path('onboarding/form/<str:token>/', views.onboarding_form, name='onboarding_form'),
     path('logout/<str:token>/', views.logout_view, name='logout_view'),
     path('change-password/<str:token>/', views.change_password, name='change_password'),
+
+    path('onboarding/personal/<str:token>/', views.personal_view, name='personal_view'),
+    path('onboarding/education/<str:token>/', views.education_view, name='education_view'),
+    path('onboarding/work/<str:token>/', views.work_view, name='work_view'),
+    path('onboarding/documents/<str:token>/', views.document_view, name='document_view'),
 ]
 
 

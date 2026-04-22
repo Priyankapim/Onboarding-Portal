@@ -1,0 +1,48 @@
+{% extends 'onboarding/base.html' %}
+
+{% block content %}
+
+<h2>Step 3: Work Experience</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ formset.management_form }}
+
+    <!-- 🔽 Work Container -->
+    <div id="work-container">
+
+        {% for form in formset %}
+            <div class="form-row">
+                {{ form.as_p }}
+
+                <!-- ❗ Hidden delete checkbox -->
+                {{ form.DELETE }}
+
+                <!-- 🔥 Delete button -->
+                <button type="button"
+                        class="btn-delete"
+                        onclick="deleteRow(this,'workexperience_set')" >
+                    Delete
+                </button>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- ➕ Add Work Button -->
+    <button type="button"
+            class="btn-add"
+            onclick="addRow('work-container','workexperience_set','{{ formset.empty_form.as_p|escapejs }}')" >
+        + Add Work
+    </button>
+
+    <br><br>
+
+    <!-- 🔘 Navigation -->
+    <button type="submit" name="prev">← Previous</button>
+    <button type="submit" name="next">Save & Next →</button>
+
+</form>
+
+{% endblock %}

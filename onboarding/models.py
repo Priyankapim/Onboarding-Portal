@@ -24,6 +24,7 @@ class Candidate(models.Model):
     is_submitted = models.BooleanField(default=False)
     token = models.CharField(max_length=32, default=uuid.uuid4().hex, editable=False, unique=True)
     created_at = models.DateTimeField(auto_now_add=True)
+    current_step = models.IntegerField(default=1)
 
     def __str__(self):
         return f"{self.first_name} {self.last_name}"

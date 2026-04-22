@@ -5,16 +5,32 @@ function deleteRow(btn,prefix){
     row.style.display = 'none';
 }
 
-function addRow(containerId,prefix,emptyHtml){
+
+function addRow(containerId, prefix, emptyHtml) {
     const container = document.getElementById(containerId);
-    const totalForms = document.querySelector(`input[name='${prefix}-TOTAL_FORMS']`);
+
+    // ✅ safer selector
+    const totalForms = container.parentElement.querySelector(`input[name$='-TOTAL_FORMS']`);
+
     let count = parseInt(totalForms.value);
-    const html = emptyHtml.replace(/__prefix__/g,count);
+
+    let html = emptyHtml.replace(/__prefix__/g, count);
+
+    // add delete checkbox
+    html += `<input type="checkbox" name="${prefix}-${count}-DELETE" style="display:none;">`;
+
     const div = document.createElement('div');
     div.classList.add('form-row');
-    div.innerHTML = html + `<button type="button" class="btn-delete" onclick="deleteRow(this,'${prefix}')">Delete</button>`;
+
+    div.innerHTML = html + `
+        <button type="button" class="btn-delete" onclick="deleteRow(this,'${prefix}')">
+            Delete
+        </button>
+    `;
+
     container.appendChild(div);
-    totalForms.value = count+1;
+
+    totalForms.value = count + 1;
 }
 
 // Work toggle for Fresher

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+
+<html lang="en">
+{% load static %}
+<head>
+    <meta charset="UTF-8">
+    <title>HR Onboarding Portal</title>
+
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{% static 'onboarding/styles.css' %}">
+
+
+</head>
+
+<body>
+
+<!-- 🔝 HEADER -->
+
+<div class="top-header">
+    <div class="left">
+        <img src="{% static 'onboarding/img_2.png' %}" class="logo">
+        <span class="portal-name">Onboarding Portal</span>
+    </div>
+
+    <div class="right">
+        <span class="username">👤 {{ candidate.username }}</span>
+        <a href="{% url 'change_password' token=candidate.token %}" class="change-password"> Change Password </a>
+        <a href="{% url 'logout_view' token=candidate.token %}" class="header-link logout"> Logout </a>
+
+    </div>
+</div>
+
+
+{% if messages %}
+    <div class="message-container">
+        {% for message in messages %}
+            <div class="alert {{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    </div>
+{% endif %}
+
+
+<!-- 📊 PROGRESS BAR -->
+
+<div class="progress-bar">
+    <div class="step {% if step >= 1 %}active{% endif %}">Personal</div>
+    <div class="step {% if step >= 2 %}active{% endif %}">Education</div>
+    <div class="step {% if step >= 3 %}active{% endif %}">Work</div>
+    <div class="step {% if step >= 4 %}active{% endif %}">Documents</div>
+</div>
+
+
+
+
+
+<!-- 📦 MAIN CONTENT -->
+
+<div class="main-container">
+    {% block content %}
+    {% endblock %}
+</div>
+
+<!-- JS -->
+
+<script src="{% static 'onboarding/apps.js' %}"></script>
+
+</body>
+</html>

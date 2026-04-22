@@ -1,0 +1,48 @@
+{% extends 'onboarding/base.html' %}
+
+{% block content %}
+
+<h2>Step 2: Education</h2>
+
+<form method="post">
+    {% csrf_token %}
+
+    {{ formset.management_form }}
+
+    <!-- 🔽 Formset Container -->
+    <div id="edu-container">
+
+        {% for form in formset %}
+            <div class="form-row">
+                {{ form.as_p }}
+
+                <!-- ❗ IMPORTANT DELETE FIELD -->
+                {{ form.DELETE }}
+
+                <!-- 🔥 DELETE BUTTON -->
+                <button type="button" class="btn-delete" onclick="deleteRow(this,'educations')">
+                    Delete
+                </button>
+            </div>
+        {% endfor %}
+
+    </div>
+
+    <!-- ➕ ADD BUTTON -->
+    <button type="button"
+            class="btn-add"
+            onclick="addRow('edu-container','educations','{{ formset.empty_form.as_p|escapejs }}')">
+        + Add Education
+    </button>
+
+
+
+    <br><br>
+
+    <!-- 🔘 Navigation -->
+    <button type="submit" name="prev">← Previous</button>
+    <button type="submit" name="next">Save & Next →</button>
+
+</form>
+
+{% endblock %}

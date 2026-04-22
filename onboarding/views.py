@@ -289,3 +289,195 @@ def change_password(request, token):
         'candidate': candidate
     })
 
+def personal_view(request, token):
+    candidate = get_object_or_404(Candidate, token=token)
+
+    if request.session.get('candidate_id') != candidate.id:
+        return redirect('login_view', token=token)
+
+    form = CandidateForm(request.POST or None, instance=candidate)
+
+    if request.method == "POST":
+
+        if form.is_valid():
+            form.save()
+
+            if "next" in request.POST:
+                candidate.current_step = 2
+                candidate.save()
+                return redirect('education_view', token=token)
+
+    return render(request, 'onboarding/personal.html', {
+        'form': form,
+        'candidate': candidate,
+        'step': candidate.current_step
+    })
+
+def education_view(request, token):
+    candidate = get_object_or_404(Candidate, token=token)
+
+    if request.session.get('candidate_id') != candidate.id:
+        return redirect('login_view', token=token)
+
+    if candidate.current_step < 2:
+        return redirect('personal_view', token=token)
+
+    EducationFormSet = inlineformset_factory(
+        Candidate, Education, form=EducationForm, extra=0, can_delete=True
+    )
+
+    formset = EducationFormSet(request.POST or None, instance=candidate)
+
+    if request.method == "POST":
+
+        if "prev" in request.POST:
+            candidate.current_step = 1
+            candidate.save()
+            return redirect('personal_view', token=token)
+
+        if formset.is_valid():
+            formset.save()
+
+            if "next" in request.POST:
+                candidate.current_step = 3
+                candidate.save()
+                return redirect('work_view', token=token)
+
+    return render(request, 'onboarding/education.html', {
+        'formset': formset,
+        'candidate': candidate,
+        'step': candidate.current_step
+    })
+
+def work_view(request, token):
+    candidate = get_object_or_404(Candidate, token=token)
+
+    if request.session.get('candidate_id') != candidate.id:
+        return redirect('login_view', token=token)
+
+    if candidate.current_step < 3:
+        return redirect('education_view', token=token)
+
+    WorkFormSet = inlineformset_factory(
+        Candidate, WorkExperience, form=WorkExperienceForm, extra=0, can_delete=True
+    )
+
+    formset = WorkFormSet(request.POST or None, instance=candidate)
+
+    if request.method == "POST":
+
+        if "prev" in request.POST:
+            candidate.current_step = 2
+            candidate.save()
+            return redirect('education_view', token=token)
+
+        if formset.is_valid():
+            formset.save()
+
+            if "next" in request.POST:
+                candidate.current_step = 4
+                candidate.save()
+                return redirect('document_view', token=token)
+
+    return render(request, 'onboarding/work.html', {
+        'formset': formset,
+        'candidate': candidate,
+        'step': candidate.current_step
+    })
+
+def document_view(request, token):
+    candidate = get_object_or_404(Candidate, token=token)
+
+    if request.session.get('candidate_id') != candidate.id:
+        return redirect('login_view', token=token)
+
+    if candidate.current_step < 4:
+        return redirect('work_view', token=token)
+
+    DocumentFormSet = modelformset_factory(
+        Document, form=DocumentForm, extra=0, can_delete=True
+    )
+
+    formset = DocumentFormSet(
+        request.POST or None,
+        request.FILES or None,
+        queryset=Document.objects.filter(candidate=candidate)
+    )
+
+    if request.method == "POST":
+
+        if "prev" in request.POST:
+            candidate.current_step = 3
+            candidate.save()
+            return redirect('work_view', token=token)
+
+        if formset.is_valid():
+
+            # ✅ SAVE FIRST
+            instances = formset.save(commit=False)
+
+            for obj in formset.deleted_objects:
+                obj.delete()
+
+            for doc in instances:
+                doc.candidate = candidate
+                doc.save()
+
+            # ================= VALIDATIONS =================
+
+            # EDUCATION
+            educations = Education.objects.filter(candidate=candidate)
+            edu_types = [e.education_type for e in educations]
+
+            missing_edu = []
+            if 'SSC' not in edu_types:
+                missing_edu.append("SSC")
+            if 'HSC' not in edu_types:
+                missing_edu.append("HSC")
+            if 'BACHELOR' not in edu_types:
+                missing_edu.append("Bachelor")
+
+            if missing_edu:
+                messages.error(request, f"Missing education: {', '.join(missing_edu)}")
+                return redirect('education_view', token=token)
+
+            # DOCUMENT
+            docs = Document.objects.filter(candidate=candidate)
+            doc_types = [d.document_type for d in docs]
+
+            missing_docs = []
+            if 'EDUCATION' not in doc_types:
+                missing_docs.append("Education Certificate")
+            if 'ID_PROOF' not in doc_types:
+                missing_docs.append("ID Proof")
+            if 'PHOTO' not in doc_types:
+                missing_docs.append("Photo")
+
+            if missing_docs:
+                messages.error(request, f"Missing documents: {', '.join(missing_docs)}")
+                return redirect('document_view', token=token)
+
+            # WORK
+            if candidate.work_status == 'EXPERIENCED':
+                works = WorkExperience.objects.filter(candidate=candidate)
+
+                if not works.exists():
+                    messages.error(request, "Please add work experience")
+                    return redirect('work_view', token=token)
+
+                if 'WORK' not in doc_types:
+                    messages.error(request, "Upload work certificate")
+                    return redirect('document_view', token=token)
+
+            # FINAL SUBMIT
+            candidate.is_submitted = True
+            candidate.save()
+
+            messages.success(request, "Form submitted successfully")
+            return render(request, 'onboarding/success.html')
+
+    return render(request, 'onboarding/documents.html', {
+        'formset': formset,
+        'candidate': candidate,
+        'step': candidate.current_step
+    })

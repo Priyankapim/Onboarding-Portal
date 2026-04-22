@@ -54,7 +54,8 @@
 
 .username {
     font-weight: bold;
-    font-size: 15px;
+    font-size: 14px;
+    color: #374151;
 }
 
 .username, .portal-name {
@@ -71,9 +72,17 @@
     text-decoration: underline;
 }
 
-body{
-      background: white
-      -webkit-font-smoothing: antialiased;
+body {
+    font-family: 'Inter', sans-serif;
+    background-color: #f8fafc;
+    color: #1f2937;
+    margin: 0;
+}
+
+h2 {
+    font-size: 18px;
+    font-weight: 600;
+    margin-bottom: 20px ;
 }
 
 .sidebar {
@@ -193,6 +202,15 @@ body{
     visibility: visible;
 }
 
+.main-container {
+    width: 70%;
+    margin: 30px auto;
+    background: #ffffff;
+    padding: 30px;
+    border-radius: 10px;
+    border: 1px solid #e5e7eb;
+}
+
 .main {
     transition: margin-left 0.3s ease;
     margin-top: 40px;
@@ -228,6 +246,7 @@ body{
     display: flex;
     flex-direction: column;
     gap: 15px;
+    margin-top: 0;
 }
 
 .row {
@@ -275,7 +294,7 @@ body{
     border-radius: 10px;
     border: 1px solid #e5e7eb;
     transition: 0.2s;
-    margin-bottom:15px;
+    margin-bottom:20px;
 
 }
 
@@ -316,6 +335,7 @@ form p{
     display: block;
     font-size: 13px;
     margin-bottom: 5px;
+    olor: #6b7280;
 }
 
 .form-row p input,
@@ -480,11 +500,13 @@ color: 20px
 
 .btn-delete{
     margin-top:5px;
-    background:#ef4444; /* #6366f1 */
+    background:#ff6666; /* #6366f1 */
     color:white;
     padding:4px 10px;
     border-radius:6px;
     font-size:10px;
+    border: none;
+    outline: none;
 }
 
 .error{
@@ -524,6 +546,7 @@ textarea.error {
     color: #ef4444;
     font-size: 12px;
     margin-top: 3px;
+    animation: fadeIn 0.3s ease;
 }
 
 .error {
@@ -531,7 +554,7 @@ textarea.error {
     border-left: 4px solid #ef4444;
     padding: 10px 15px;
     border-radius: 6px;
-    color: #b91c1c;
+    color: white;
     font-size: 13px;
     margin-bottom: 15px;
 }
@@ -558,35 +581,27 @@ select:focus.error {
     box-shadow: 0 0 0 2px rgba(239, 68, 68, 0.2);
 }
 
-.errorlist li {
-    animation: fadeIn 0.3s ease;
-}
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-5px); }
-    to { opacity: 1; transform: translateY(0); }
-}
-
 
 
 .message-container {
     position: fixed;
-    top: 80px;
-    right: 20px;
+    top: 100px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 400px;
     z-index: 9999;
+    pointer-events: none;
 }
 
 .alert {
-    padding: 10px 15px;
+    padding: 12px 16px;
     border-radius: 8px;
     margin-bottom: 10px;
-    font-size: 13px;
-    color: white;
-    opacity: 1;
+    font-size: 14px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
     transition: opacity 0.3s ease;
-    animation: fadeIn 0.3s ease;
+    pointer-events: auto; /* optional */
 }
-
 
 .alert.success {
     background: linear-gradient(135deg, #22c55e, #16a34a);
@@ -597,11 +612,6 @@ select:focus.error {
     background: #ef4444;
 }
 
-
-@keyframes fadeIn {
-    from { opacity: 0; transform: translateY(-10px); }
-    to { opacity: 1; transform: translateY(0); }
-}
 
 
 
@@ -642,4 +652,74 @@ select:focus.error {
     .form-row p {
         width: 100%;
     }
+}
+
+.progress-bar {
+    display: flex;
+    gap: 10px;
+    margin: 20px auto;
+    width: 70%;
+    position: relative;
+    z-index: 10;
+    margin-top: 90px;
+}
+
+
+
+
+/*  Progress Bar
+.progress-bar {
+    position: fixed;
+    top: 60px;
+    left: 0;
+    width: 100%;
+    display: flex;
+    justify-content: space-between;
+    padding: 12px 20px;
+    background: white;
+    z-index: 999;
+    border-bottom: 1px solid #e5e7eb;
+}
+ */
+
+.step {
+    flex: 1;
+    text-align: center;
+    padding: 10px;
+    border-bottom: 3px solid #ccc;
+    font-size: 14px;
+    color: #6b7280;
+    transition: 0.3s;
+}
+
+.step.active {
+    border-color: #6366f1;
+    font-weight: bold;
+    color: #111827;
+}
+
+.main-container {
+    margin-top: 20px;
+}
+
+
+
+button {
+    padding: 10px 18px;
+    border-radius: 25px;
+    border: none;
+    font-size: 14px;
+    cursor: pointer;
+    margin-top: 20px;
+}
+
+/* Primary */
+button[name="next"] {
+    background: #2563eb;
+    color: white;
+}
+
+/* Secondary */
+button[name="prev"] {
+    background: #e5e7eb;
 }
