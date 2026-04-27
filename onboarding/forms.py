@@ -8,10 +8,18 @@ class CandidateForm(forms.ModelForm):
         fields = [
             'first_name','middle_name','last_name',
             'date_of_birth','place_of_birth',
-            'email','address','contact_number','emergency_contact_number',
-            'work_status'
+            'email','contact_number','emergency_contact_number',
+            'work_status',
+
+            # 🔥 new fields
+            'address_line1', 'address_line2',
+            'city', 'state', 'pincode', 'country'
         ]
         widgets = {'date_of_birth': forms.DateInput(attrs={'type': 'date'})}
+        labels = {
+            'address_line1': 'Address Line 1',
+            'address_line2': 'Address Line 2',
+        }
 
     def __init__(self, *args, **kwargs):
         self.is_submit = kwargs.pop('is_submit', False)
@@ -54,6 +62,10 @@ class EducationForm(forms.ModelForm):
     class Meta:
         model = Education
         fields = ['education_type', 'stream', 'percentage', 'grade', 'year_start', 'year_end']
+        labels = {
+            'year_start': 'Start Year',
+            'year_end': 'End Year',
+        }
 
         #YEARS = [(y, y) for y in range(1980, 2031)]
         #widgets = {
@@ -70,6 +82,12 @@ class WorkExperienceForm(forms.ModelForm):
             'date_joining': forms.DateInput(attrs={'type': 'date'}),
             'date_exit': forms.DateInput(attrs={'type': 'date'}),
         }
+        labels = {
+            'is_last_company': 'Is this your last company?',
+            'date_exit' : 'Exit Date',
+            'date_joining' : 'Joining Date',
+        }
+
 
 
 

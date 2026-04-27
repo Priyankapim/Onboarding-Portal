@@ -1,25 +1,18 @@
 {% extends 'onboarding/base.html' %}
-
 {% block content %}
-
-<h2>Step 4: Documents</h2>
+<h2>Documents</h2>
 
 <form method="post" enctype="multipart/form-data">
     {% csrf_token %}
 
     {{ formset.management_form }}
 
-    <!-- 🔽 Document Container -->
     <div id="doc-container">
 
         {% for form in formset %}
             <div class="form-row">
                 {{ form.as_p }}
-
-                <!-- hidden delete -->
                 {{ form.DELETE }}
-
-                <!-- delete button -->
                 <button type="button"
                         class="btn-delete"
                         onclick="deleteRow(this,'form')" >
@@ -30,7 +23,6 @@
 
     </div>
 
-    <!-- ➕ Add Document -->
     <button type="button"
             class="btn-add"
             onclick="addRow('doc-container','form','{{ formset.empty_form.as_p|escapejs }}')" >
@@ -39,7 +31,6 @@
 
     <br><br>
 
-    <!-- 🔘 Navigation -->
     <button type="submit" name="prev">← Previous</button>
     <button type="submit" name="next">Submit</button>
 

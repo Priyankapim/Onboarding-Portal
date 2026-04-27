@@ -9,29 +9,34 @@ function deleteRow(btn,prefix){
 function addRow(containerId, prefix, emptyHtml) {
     const container = document.getElementById(containerId);
 
-    // ✅ safer selector
-    const totalForms = container.parentElement.querySelector(`input[name$='-TOTAL_FORMS']`);
+    // ALWAYS directly target correct TOTAL_FORMS
+    const totalForms = document.querySelector(
+        `input[name='${prefix}-TOTAL_FORMS']`
+    );
 
     let count = parseInt(totalForms.value);
 
-    let html = emptyHtml.replace(/__prefix__/g, count);
+    // replace Django __prefix__
+    let html = emptyHtml.replaceAll("__prefix__", count);
 
-    // add delete checkbox
-    html += `<input type="checkbox" name="${prefix}-${count}-DELETE" style="display:none;">`;
-
-    const div = document.createElement('div');
-    div.classList.add('form-row');
+    const div = document.createElement("div");
+    div.classList.add("form-row");
 
     div.innerHTML = html + `
-        <button type="button" class="btn-delete" onclick="deleteRow(this,'${prefix}')">
+        <button type="button"
+                class="btn-delete"
+                onclick="deleteRow(this, '${prefix}')">
             Delete
         </button>
     `;
 
     container.appendChild(div);
 
+    // increase form count
     totalForms.value = count + 1;
 }
+
+
 
 // Work toggle for Fresher
 const workStatus = document.getElementById("id_work_status");
@@ -86,6 +91,70 @@ document.addEventListener("DOMContentLoaded", () => {
         }, 5000);
     }
 
+});
+
+
+function setLastCompany(button, value) {
+    // sab checkboxes false
+    document.querySelectorAll(".yes-no-group input[type='checkbox']").forEach(cb => {
+        cb.checked = false;
+        cb.removeAttribute("checked");
+    });
+
+    // sab buttons reset
+    document.querySelectorAll(".yes-no-group button").forEach(btn => {
+        btn.classList.remove("active-yes", "active-no");
+    });
+
+    // current row
+    const parent = button.closest(".yes-no-group");
+    const checkbox = parent.querySelector("input[type='checkbox']");
+
+    if (value) {
+        checkbox.checked = true;
+        checkbox.setAttribute("checked", "checked");
+        button.classList.add("active-yes");
+    } else {
+        checkbox.checked = false;
+        button.classList.add("active-no");
+    }
+}
+
+
+function addWorkRow() {
+    const container = document.getElementById("work-container");
+    const totalForms = document.getElementById("id_workexperience_set-TOTAL_FORMS");
+    const count = parseInt(totalForms.value);
+
+    let html = document.getElementById("empty-work-form").innerHTML;
+    html = html.replace(/__prefix__/g, count);
+
+    container.insertAdjacentHTML("beforeend", html);
+
+    totalForms.value = count + 1;
+}
+
+document.addEventListener("DOMContentLoaded", function () {
+    document.querySelectorAll(".yes-no-group").forEach(group => {
+        const checkbox = group.querySelector("input[type='checkbox']");
+        const buttons = group.querySelectorAll("button");
+
+        if (!checkbox || buttons.length < 2) return;
+
+        const yesBtn = buttons[0];
+        const noBtn = buttons[1];
+
+        // reset classes
+        yesBtn.classList.remove("active-yes");
+        noBtn.classList.remove("active-no");
+
+        // Django rendered checked attribute detect
+        if (checkbox.hasAttribute("checked") || checkbox.checked) {
+            yesBtn.classList.add("active-yes");
+        } else {
+            noBtn.classList.add("active-no");
+        }
+    });
 });
 
 

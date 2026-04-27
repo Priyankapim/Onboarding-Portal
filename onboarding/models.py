@@ -11,7 +11,15 @@ class Candidate(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     place_of_birth = models.CharField(max_length=100, blank=True)
     email = models.EmailField(unique=True)
-    address = models.CharField(max_length=100, blank=True)
+    # 🔥 NEW ADDRESS FIELDS
+    address_line1 = models.CharField(max_length=255, blank=True, null=True)
+    address_line2 = models.CharField(max_length=255, blank=True, null=True)
+
+    city = models.CharField(max_length=100, blank=True, null=True)
+    state = models.CharField(max_length=100, blank=True, null=True)
+    pincode = models.CharField(max_length=10, blank=True, null=True)
+    country = models.CharField(max_length=100, default="India", blank=True, null=True)
+
     contact_number = models.CharField(max_length=15)
     username = models.CharField(max_length=100, unique=True, null=True, blank=True)
     password = models.CharField(max_length=100, blank=True)
@@ -62,17 +70,13 @@ class WorkExperience(models.Model):
     is_last_company = models.BooleanField(default=False)
 
 
+
     def clean(self):
         if not self.candidate_id:
             return
         if self.candidate.work_status == 'FRESHER' and self.company_name:
             raise ValidationError("Fresher cannot have work experience.")
-        if self.is_last_company:
-            existing_last = WorkExperience.objects.filter(
-                candidate=self.candidate, is_last_company=True
-            ).exclude(id=self.id)
-            if existing_last.exists():
-                raise ValidationError("Only one company can be marked as last company.")
+
 
     def __str__(self):
         return f"{self.company_name} - {self.candidate.first_name}"

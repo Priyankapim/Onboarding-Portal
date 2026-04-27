@@ -2,47 +2,141 @@
 
 {% block content %}
 
-<h2>Step 3: Work Experience</h2>
+<h2>Work Experience</h2>
 
 <form method="post">
     {% csrf_token %}
-
     {{ formset.management_form }}
 
-    <!-- 🔽 Work Container -->
+    <!-- Work Container -->
     <div id="work-container">
 
         {% for form in formset %}
             <div class="form-row">
-                {{ form.as_p }}
 
-                <!-- ❗ Hidden delete checkbox -->
+                 {{ form.id }}
+                <!-- Normal Fields -->
+                {% for field in form.visible_fields %}
+                    {% if field.name != "is_last_company" and field.name != "DELETE" and field.name != "id" %}
+                        <p>
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </p>
+                    {% endif %}
+                {% endfor %}
+
+                <!-- YES / NO Section -->
+
+                <div class="yes-no-group">
+                    <label>Is This Your Last Company?</label>
+
+                    <div class="toggle-btns">
+                        <button type="button"
+                                onclick="setLastCompany(this, true)">
+                            Yes
+                        </button>
+
+                        <button type="button"
+                                onclick="setLastCompany(this, false)">
+                            No
+                        </button>
+                    </div>
+
+                    <!-- Hidden actual checkbox -->
+                    {{ form.is_last_company }}
+                </div>
+
+                <!-- Hidden delete checkbox -->
                 {{ form.DELETE }}
 
-                <!-- 🔥 Delete button -->
+                <!-- Delete Button -->
                 <button type="button"
                         class="btn-delete"
-                        onclick="deleteRow(this,'workexperience_set')" >
+                        onclick="deleteRow(this,'workexperience_set')">
                     Delete
                 </button>
+
             </div>
         {% endfor %}
 
     </div>
 
-    <!-- ➕ Add Work Button -->
+
+
+    <!-- Add Work Button -->
     <button type="button"
-            class="btn-add"
-            onclick="addRow('work-container','workexperience_set','{{ formset.empty_form.as_p|escapejs }}')" >
-        + Add Work
+        class="btn-add"
+        onclick="addRow(
+            'work-container',
+            'workexperience_set',
+            document.getElementById('empty-work-form').innerHTML.replace(/__prefix__/g, document.getElementById('id_workexperience_set-TOTAL_FORMS').value)
+        )">
+    + Add Work
     </button>
 
     <br><br>
 
-    <!-- 🔘 Navigation -->
-    <button type="submit" name="prev">← Previous</button>
-    <button type="submit" name="next">Save & Next →</button>
+    <!-- Navigation Buttons -->
+    <button type="submit" name="prev">
+        ← Previous
+    </button>
+
+    <button type="submit" name="next">
+        Save & Next →
+    </button>
 
 </form>
+
+<!-- Hidden Empty Form Template -->
+    <div id="empty-work-form" style="display:none;">
+
+        {{ formset.empty_form.id }}
+
+        <p>
+            {{ formset.empty_form.company_name.label_tag }}
+            {{ formset.empty_form.company_name }}
+        </p>
+
+        <p>
+            {{ formset.empty_form.designation.label_tag }}
+            {{ formset.empty_form.designation }}
+        </p>
+
+        <p>
+            {{ formset.empty_form.date_joining.label_tag }}
+            {{ formset.empty_form.date_joining }}
+        </p>
+
+        <p>
+            {{ formset.empty_form.date_exit.label_tag }}
+            {{ formset.empty_form.date_exit }}
+        </p>
+
+        <p>
+            {{ formset.empty_form.reason_for_job_change.label_tag }}
+            {{ formset.empty_form.reason_for_job_change }}
+        </p>
+
+        <div class="yes-no-group">
+            <label>Is This Your Last Company?</label>
+
+            <div class="toggle-btns">
+                <button type="button"
+                        onclick="setLastCompany(this, true)">
+                    Yes
+                </button>
+
+                <button type="button"
+                        onclick="setLastCompany(this, false)">
+                    No
+                </button>
+            </div>
+
+            {{ formset.empty_form.is_last_company }}
+        </div>
+
+
+
+    </div>
 
 {% endblock %}

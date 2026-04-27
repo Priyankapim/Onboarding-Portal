@@ -2,7 +2,8 @@
 
 {% block content %}
 
-<h2>Step 1: Personal</h2>
+<h2>Personal</h2>
+
 
 <form method="post">
     {% csrf_token %}
@@ -27,10 +28,19 @@
     </div>
 
     <div class="row">
-        <div class="field full">{{ form.address.label_tag }} {{ form.address }}</div>
+        <div class="field">{{ form.address_line1.label_tag }} {{ form.address_line1 }}</div>
+        <div class="field">{{ form.address_line2.label_tag }} {{ form.address_line2 }}</div>
+        <div class="field">{{ form.city.label_tag }} {{ form.city }}</div>
+    </div>
+
+     <div class="row">
+         <div class="field">{{ form.state.label_tag }} {{ form.state }}</div>
+         <div class="field">{{ form.pincode.label_tag }} {{ form.pincode }}</div>
+         <div class="field">{{ form.country.label_tag }} {{ form.country }}</div>
     </div>
 
 </div>
+
 
     <button type="submit" name="save">Save</button>
     <button type="submit" name="next">Save & Next</button>

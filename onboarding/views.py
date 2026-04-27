@@ -362,7 +362,11 @@ def work_view(request, token):
         Candidate, WorkExperience, form=WorkExperienceForm, extra=0, can_delete=True
     )
 
-    formset = WorkFormSet(request.POST or None, instance=candidate)
+    formset = WorkFormSet(
+        request.POST or None,
+        instance=candidate,
+        prefix='workexperience_set'
+    )
 
     if request.method == "POST":
 
@@ -378,6 +382,16 @@ def work_view(request, token):
                 candidate.current_step = 4
                 candidate.save()
                 return redirect('document_view', token=token)
+
+        else:
+            print("FORMSET ERRORS:", formset.errors)
+            print("NON FORM ERRORS:", formset.non_form_errors())
+
+            if "next" in request.POST:
+                candidate.current_step = 4
+                candidate.save()
+                return redirect('document_view', token=token)
+
 
     return render(request, 'onboarding/work.html', {
         'formset': formset,
@@ -474,7 +488,7 @@ def document_view(request, token):
             candidate.save()
 
             messages.success(request, "Form submitted successfully")
-            return render(request, 'onboarding/success.html')
+            return render(request, 'onboarding/already_submitted.html')
 
     return render(request, 'onboarding/documents.html', {
         'formset': formset,
