@@ -44,11 +44,52 @@
 
 <!-- 📊 PROGRESS BAR -->
 
-<div class="progress-bar">
-    <div class="step {% if step >= 1 %}active{% endif %}">Personal</div>
-    <div class="step {% if step >= 2 %}active{% endif %}">Education</div>
-    <div class="step {% if step >= 3 %}active{% endif %}">Work</div>
-    <div class="step {% if step >= 4 %}active{% endif %}">Documents</div>
+<div class="progress-wrapper">
+
+    <!-- Step 1 -->
+    <div class="progress-step {% if step >= 1 %}completed{% else %}pending{% endif %}">
+        <div class="step-number">1</div>
+        <div class="step-circle">👤</div>
+        <h4>Personal</h4>
+        <p>Details</p>
+    </div>
+
+    <div class="progress-line {% if step >= 2 %}completed{% endif %}">
+        <span>{% if step >= 2 %}✔{% endif %}</span>
+    </div>
+
+    <!-- Step 2 -->
+    <div class="progress-step {% if step >= 2 %}completed{% else %}pending{% endif %}">
+        <div class="step-number">2</div>
+        <div class="step-circle">🎓</div>
+        <h4>Education</h4>
+        <p>Details</p>
+    </div>
+
+    <div class="progress-line {% if step >= 3 %}completed{% endif %}">
+        <span>{% if step >= 3 %}✔{% endif %}</span>
+    </div>
+
+    <!-- Step 3 -->
+    <div class="progress-step {% if step >= 3 %}completed{% else %}pending{% endif %}">
+        <div class="step-number">3</div>
+        <div class="step-circle">💼</div>
+        <h4>Work</h4>
+        <p>Experience</p>
+    </div>
+
+    <div class="progress-line {% if step >= 4 %}completed{% endif %}">
+        <span>{% if step >= 4 %}✔{% endif %}</span>
+    </div>
+
+    <!-- Step 4 -->
+    <div class="progress-step {% if step >= 4 %}completed{% else %}pending{% endif %}">
+        <div class="step-number">4</div>
+        <div class="step-circle">📄</div>
+        <h4>Documents</h4>
+        <p>Upload</p>
+    </div>
+
 </div>
 
 

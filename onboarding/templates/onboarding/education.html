@@ -1,7 +1,5 @@
 {% extends 'onboarding/base.html' %}
-
 {% block content %}
-
 <h2>Education</h2>
 
 <form method="post">
@@ -9,16 +7,13 @@
 
     {{ formset.management_form }}
 
-
     <div id="edu-container">
 
         {% for form in formset %}
             <div class="form-row">
                 {{ form.as_p }}
 
-
                 {{ form.DELETE }}
-
 
                 <button type="button" class="btn-delete" onclick="deleteRow(this,'educations')">
                     Delete
@@ -28,17 +23,13 @@
 
     </div>
 
-
     <button type="button"
             class="btn-add"
             onclick="addRow('edu-container','educations','{{ formset.empty_form.as_p|escapejs }}')">
         + Add Education
     </button>
 
-
-
     <br><br>
-
 
     <button type="submit" name="prev">← Previous</button>
     <button type="submit" name="next">Save & Next →</button>
