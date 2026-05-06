@@ -11,7 +11,7 @@ class Candidate(models.Model):
     date_of_birth = models.DateField(null=True, blank=True)
     place_of_birth = models.CharField(max_length=100, blank=True)
     email = models.EmailField(unique=True)
-    # 🔥 NEW ADDRESS FIELDS
+
     address_line1 = models.CharField(max_length=255, blank=True, null=True)
     address_line2 = models.CharField(max_length=255, blank=True, null=True)
 

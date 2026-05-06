@@ -14,7 +14,7 @@ def login_view(request, token):
 
         if username == candidate.username and password == candidate.password:
             request.session['candidate_id'] = candidate.id
-            return redirect('onboarding_form', token=token)
+            return redirect('personal_view', token=token)
         else:
             error = "Invalid User ID or Password"
 
@@ -59,7 +59,6 @@ def onboarding_form(request, token):
     )
 
     if request.method == 'POST':
-
 
         is_submit = 'submit' in request.POST
 
@@ -427,7 +426,7 @@ def document_view(request, token):
 
         if formset.is_valid():
 
-            # ✅ SAVE FIRST
+            # SAVE FIRST
             instances = formset.save(commit=False)
 
             for obj in formset.deleted_objects:
@@ -437,7 +436,6 @@ def document_view(request, token):
                 doc.candidate = candidate
                 doc.save()
 
-            # ================= VALIDATIONS =================
 
             # EDUCATION
             educations = Education.objects.filter(candidate=candidate)

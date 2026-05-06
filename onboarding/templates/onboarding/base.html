@@ -14,7 +14,7 @@
 
 <body>
 
-<!-- 🔝 HEADER -->
+<!--  HEADER -->
 
 <div class="top-header">
     <div class="left">
@@ -42,11 +42,11 @@
 {% endif %}
 
 
-<!-- 📊 PROGRESS BAR -->
+<!-- PROGRESS BAR -->
 
 <div class="progress-wrapper">
 
-    <!-- Step 1 -->
+
     <div class="progress-step {% if step >= 1 %}completed{% else %}pending{% endif %}">
         <div class="step-number">1</div>
         <div class="step-circle">👤</div>
@@ -58,7 +58,7 @@
         <span>{% if step >= 2 %}✔{% endif %}</span>
     </div>
 
-    <!-- Step 2 -->
+
     <div class="progress-step {% if step >= 2 %}completed{% else %}pending{% endif %}">
         <div class="step-number">2</div>
         <div class="step-circle">🎓</div>
@@ -70,7 +70,7 @@
         <span>{% if step >= 3 %}✔{% endif %}</span>
     </div>
 
-    <!-- Step 3 -->
+
     <div class="progress-step {% if step >= 3 %}completed{% else %}pending{% endif %}">
         <div class="step-number">3</div>
         <div class="step-circle">💼</div>
@@ -82,7 +82,7 @@
         <span>{% if step >= 4 %}✔{% endif %}</span>
     </div>
 
-    <!-- Step 4 -->
+
     <div class="progress-step {% if step >= 4 %}completed{% else %}pending{% endif %}">
         <div class="step-number">4</div>
         <div class="step-circle">📄</div>
@@ -94,9 +94,7 @@
 
 
 
-
-
-<!-- 📦 MAIN CONTENT -->
+<!--  MAIN CONTENT -->
 
 <div class="main-container">
     {% block content %}

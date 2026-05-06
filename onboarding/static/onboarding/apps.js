@@ -95,18 +95,18 @@ document.addEventListener("DOMContentLoaded", () => {
 
 
 function setLastCompany(button, value) {
-    // sab checkboxes false
+
     document.querySelectorAll(".yes-no-group input[type='checkbox']").forEach(cb => {
         cb.checked = false;
         cb.removeAttribute("checked");
     });
 
-    // sab buttons reset
+
     document.querySelectorAll(".yes-no-group button").forEach(btn => {
         btn.classList.remove("active-yes", "active-no");
     });
 
-    // current row
+
     const parent = button.closest(".yes-no-group");
     const checkbox = parent.querySelector("input[type='checkbox']");
 
