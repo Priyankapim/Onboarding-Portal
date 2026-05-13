@@ -1,6 +1,4 @@
-#https://onboarding-portal-04u0.onrender.com
-#Admin
-#Admin@123
+
 from django.contrib import admin
 from .models import Candidate, Education, WorkExperience, Document
 

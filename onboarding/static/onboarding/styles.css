@@ -23,11 +23,12 @@ input[type=checkbox][name$="-DELETE"] {
     top: 0;
     left: 0;
     width: 100%;
-    height: 60px;
+    height: 50px;
     z-index: 1000;
     display: flex;
     justify-content: space-between;
     padding: 0 20px;
+
 }
 
 .left {
@@ -42,7 +43,7 @@ input[type=checkbox][name$="-DELETE"] {
 .menu-btn {
     margin-left : 10px;
 }
-o
+
 .portal-name {
     font-size: 15px;
     font-weight: bold;
@@ -95,7 +96,7 @@ h2 {
     padding: 30px;
     border-radius: 10px;
     border: 1px solid #e5e7eb;
-     margin-top: 20px;
+    margin-top: -30px !important;
 }
 
 .main {
@@ -543,27 +544,23 @@ select:focus.error {
     }
 }
 
-/* SOFT LIGHT PROGRESS BAR */
+/* PROGRESS BAR */
 
 .progress-wrapper {
     background:  #f0f4f7;
     border-radius: 20px;
     padding: 30px 20px;
-
-    margin-top: 45px !important;
+    margin-top: 25px !important;
     margin-bottom: 20px !important;
-
     display: flex;
     align-items: center;
     justify-content: center;
     flex-wrap: wrap;
-
     box-shadow: none !important;
     border: none !important;
     outline: none !important;
-
     position: relative;
-    top: 30px;
+    top: - 10px;
 }
 
 .progress-step {
@@ -586,7 +583,8 @@ select:focus.error {
     display: block !important;
     font-size: 18px;
     font-weight: 700;
-    margin-bottom: 4px;
+    margin-bottom: -1px;
+    margin-top: 1px;
     padding: 0 !important;
 }
 
@@ -600,14 +598,14 @@ select:focus.error {
     align-items: center;
     justify-content: center;
     font-size: 24px;
-    margin-bottom: 08px;
+    margin-bottom: 3px;
 }
 
 .progress-step h4 {
     font-size: 13px;
     font-weight: 600;
     color: #334155;
-    margin-bottom: 4px;
+    margin-bottom: 1px;
 }
 
 .progress-step p {
