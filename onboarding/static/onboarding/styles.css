@@ -430,6 +430,7 @@ textarea.error {
     background: rgba(255, 0, 0, 0.05);
 }
 
+
 /* Django errorlist */
 .errorlist {
     list-style: none;
