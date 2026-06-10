@@ -74,15 +74,20 @@ NabiTech Solution
 """
 
         email.attach_alternative(html_content, "text/html")
+
+
         import traceback
 
-        print("EMAIL_HOST:", settings.EMAIL_HOST)
-        print("EMAIL_PORT:", settings.EMAIL_PORT)
-        print("EMAIL_USER:", settings.EMAIL_HOST_USER)
-        print("About to send email...")
         try:
-            #email.send(fail_silently=False)
+            print("EMAIL_HOST:", settings.EMAIL_HOST)
+            print("EMAIL_PORT:", settings.EMAIL_PORT)
+            print("EMAIL_USER:", settings.EMAIL_HOST_USER)
+            print("About to send email...")
+
+            email.send(fail_silently=False)
+
             print("Email sent successfully")
+
         except Exception:
             print(traceback.format_exc())
 
