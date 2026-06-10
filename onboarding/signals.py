@@ -4,6 +4,9 @@ from django.core.mail import send_mail
 from django.conf import settings
 from .models import Candidate, generate_credentials
 from django.core.mail import EmailMultiAlternatives
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 @receiver(post_save, sender=Candidate)
@@ -74,8 +77,8 @@ NabiTech Solution
 
         try:
             email.send(fail_silently=False)
-            print("Email sent successfully")
+            logger.error("EMAIL SENT SUCCESSFULLY")
         except Exception as e:
-            print("Email sending failed:", repr(e))
+            logger.error(f"EMAIL ERROR: {repr(e)}")
 
 
