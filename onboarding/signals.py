@@ -21,8 +21,10 @@ def send_onboarding_email(sender, instance, created, **kwargs):
         instance.password = password
         instance.save(update_fields=['username', 'password'])
 
-
-        onboarding_link = f"http://127.0.0.1:8000/onboarding/login/{instance.token}/"
+        onboarding_link = (
+            f"https://hr-onboarding-portal-6y3a.onrender.com/"
+            f"onboarding/login/{instance.token}/"
+        )
 
         from django.core.mail import EmailMultiAlternatives
 
@@ -69,6 +71,11 @@ NabiTech Solution
 """
 
         email.attach_alternative(html_content, "text/html")
-        email.send()
+
+        try:
+            email.send(fail_silently=False)
+            print("Email sent successfully")
+        except Exception as e:
+            print("Email sending failed:", e)
 
 
