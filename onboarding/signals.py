@@ -72,10 +72,6 @@ NabiTech Solution
 
         email.attach_alternative(html_content, "text/html")
 
-        try:
-            email.send(fail_silently=False)
-            print("Email sent successfully")
-        except Exception as e:
-            print("Email sending failed:", e)
+        print("Email sending skipped")
 
 
