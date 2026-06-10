@@ -76,6 +76,6 @@ NabiTech Solution
             email.send(fail_silently=False)
             print("Email sent successfully")
         except Exception as e:
-            print("Email sending failed:", e)
+            print("Email sending failed:", repr(e))
 
 
