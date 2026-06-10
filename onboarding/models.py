@@ -1,8 +1,11 @@
 from django.contrib.auth.password_validation import password_changed
 from django.db import models
 from django.core.exceptions import ValidationError
-import uuid
 import random
+import uuid
+
+def generate_token():
+    return uuid.uuid4().hex
 
 class Candidate(models.Model):
     first_name = models.CharField(max_length=50)
@@ -30,7 +33,12 @@ class Candidate(models.Model):
     ]
     work_status = models.CharField(max_length=15, choices=WORK_STATUS, default='FRESHER')
     is_submitted = models.BooleanField(default=False)
-    token = models.CharField(max_length=32, default=uuid.uuid4().hex, editable=False, unique=True)
+    token = models.CharField(
+        max_length=32,
+        default=generate_token,
+        unique=True,
+        editable=False,
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     current_step = models.IntegerField(default=1)
 
