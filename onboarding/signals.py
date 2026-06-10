@@ -76,7 +76,7 @@ NabiTech Solution
         email.attach_alternative(html_content, "text/html")
 
         try:
-            email.send(fail_silently=False)
+            email.send(fail_silently=True)
             logger.error("EMAIL SENT SUCCESSFULLY")
         except Exception as e:
             logger.error(f"EMAIL ERROR: {repr(e)}")
