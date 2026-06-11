@@ -147,14 +147,16 @@ EMAIL_USE_SSL = True
 
 EMAIL_HOST_USER = os.environ.get(
     "EMAIL_HOST_USER",
-    "priyankapimpariya178@gmail.com"
+    "ae52dc001@smtp-brevo.com"
 )
 
 EMAIL_HOST_PASSWORD = os.environ.get(
     "EMAIL_HOST_PASSWORD",
     "xsmtpsib-788a4709cc15bb5db645a0d7bf3f2b1e2e67e92865fd09de597bb5809b352d6e-3tIaAiA90BL2bbAN"
 )
-DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
+
+DEFAULT_FROM_EMAIL = "priyankapimpariya178@gmail.com"
+
 
 
 
