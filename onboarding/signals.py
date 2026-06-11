@@ -1,109 +1,97 @@
 from django.db.models.signals import post_save
 from django.dispatch import receiver
-from django.core.mail import send_mail
 from django.conf import settings
 from .models import Candidate, generate_credentials
-from django.core.mail import EmailMultiAlternatives
-import logging
 
-logger = logging.getLogger(__name__)
+import requests
 
 
 @receiver(post_save, sender=Candidate)
 def send_onboarding_email(sender, instance, created, **kwargs):
-    if created:
 
+    if not created:
+        return
 
-        username, password = generate_credentials(
-            instance.first_name,
-            instance.last_name
-        )
+    username, password = generate_credentials(
+        instance.first_name,
+        instance.last_name
+    )
 
-        # save in DB
-        instance.username = username
-        instance.password = password
-        instance.save(update_fields=['username', 'password'])
+    instance.username = username
+    instance.password = password
+    instance.save(update_fields=["username", "password"])
 
-        onboarding_link = (
-            f"https://hr-onboarding-portal-6y3a.onrender.com/"
-            f"onboarding/login/{instance.token}/"
-        )
+    onboarding_link = (
+        f"https://hr-onboarding-portal-6y3a.onrender.com/"
+        f"onboarding/login/{instance.token}/"
+    )
 
-        from django.core.mail import EmailMultiAlternatives
+    html_content = f"""
+    <html>
+    <body>
 
-        email = EmailMultiAlternatives(
-            subject="Welcome to NabiTech – Complete Your Onboarding",
-            body="Please view this email in HTML format.",
-            from_email=settings.EMAIL_HOST_USER,
-            to=[instance.email],
-        )
+    <p>Hi {instance.first_name},</p>
 
-        html_content = f"""
-<div style="font-family: Arial, sans-serif; font-size:14px; color:#1e293b; line-height:1.6;">
+    <p>Welcome to <b>NabiTech Solution</b>.</p>
 
-<p>Hi {instance.first_name},</p>
+    <p>Please complete your onboarding using the link below:</p>
 
-<p>Welcome to <b>NabiTech Solution</b> 👋</p>
+    <p>
+        <a href="{onboarding_link}">
+            {onboarding_link}
+        </a>
+    </p>
 
-<p>Please complete your onboarding using the link below:</p>
+    <p>
+        <b>Login Details</b><br><br>
 
-<p>
-<a href="{onboarding_link}" style="color:#6366f1; text-decoration:none;">
-{onboarding_link}
-</a>
-</p>
+        Username: {username}<br>
+        Password: {password}
+    </p>
 
-<p><b>Login Details:</b><br>
-User ID: {username}<br>
-Password: {password}
-</p>
+    <p>
+        Please change your password after your first login.
+    </p>
 
-<p style="color:#6b7280;">
-For security reasons, please change your password after your first login.
-</p>
+    <br>
 
-<p>If you need any assistance, feel free to reach out.</p>
+    <p>
+        Regards,<br>
+        HR Team
+    </p>
 
-<p>
-Thanks & Regards,<br>
-HR Team<br>
-NabiTech Solution
-</p>
+    </body>
+    </html>
+    """
 
-</div>
-"""
+    url = "https://api.brevo.com/v3/smtp/email"
 
-        email.attach_alternative(html_content, "text/html")
+    headers = {
+        "accept": "application/json",
+        "api-key": settings.BREVO_API_KEY,
+        "content-type": "application/json",
+    }
 
-        import traceback
-        import socket
+    payload = {
+        "sender": {
+            "name": "NabiTech HR",
+            "email": settings.DEFAULT_FROM_EMAIL,
+        },
+        "to": [
+            {
+                "email": instance.email,
+            }
+        ],
+        "subject": "Welcome to NabiTech – Complete Your Onboarding",
+        "htmlContent": html_content,
+    }
 
-        try:
-            print("EMAIL_HOST:", settings.EMAIL_HOST)
-            print("EMAIL_PORT:", settings.EMAIL_PORT)
-            print("EMAIL_USER:", settings.EMAIL_HOST_USER)
-            print("About to send email...")
+    response = requests.post(
+        url,
+        json=payload,
+        headers=headers,
+        timeout=20,
+    )
 
-            try:
-                ip = socket.gethostbyname(settings.EMAIL_HOST)
-                print("Resolved IP:", ip)
-
-                sock = socket.create_connection(
-                    (settings.EMAIL_HOST, settings.EMAIL_PORT),
-                    timeout=5
-                )
-
-                print("SMTP Connection Success")
-                sock.close()
-
-            except Exception as e:
-                print("SMTP Connection Failed:", e)
-
-            email.send(fail_silently=False)
-
-            print("Email sent successfully")
-
-        except Exception:
-            print(traceback.format_exc())
-
-
+    print(response.status_code)
+    print(response.text)

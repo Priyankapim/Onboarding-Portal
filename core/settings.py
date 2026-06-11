@@ -134,29 +134,32 @@ STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
 
-
-
-
-EMAIL_TIMEOUT = 5
-
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = "smtp-relay.brevo.com"
-EMAIL_PORT = 587
-
-EMAIL_USE_TLS = True
-EMAIL_USE_SSL = False
-
-EMAIL_HOST_USER = os.environ.get(
-    "EMAIL_HOST_USER",
-    "ae52dc001@smtp-brevo.com"
-)
-
-EMAIL_HOST_PASSWORD = os.environ.get(
-    "EMAIL_HOST_PASSWORD",
-    "xsmtpsib-788a4709cc15bb5db645a0d7bf3f2b1e2e67e92865fd09de597bb5809b352d6e-3tIaAiA90BL2bbAN"
-)
+# Brevo API
+BREVO_API_KEY = os.environ.get("BREVO_API_KEY")
 
 DEFAULT_FROM_EMAIL = "priyankapimpariya178@gmail.com"
+
+
+#EMAIL_TIMEOUT = 5
+
+#EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
+#EMAIL_HOST = "smtp-relay.brevo.com"
+#EMAIL_PORT = 587
+
+#EMAIL_USE_TLS = True
+#EMAIL_USE_SSL = False
+
+#EMAIL_HOST_USER = os.environ.get(
+ #   "EMAIL_HOST_USER",
+  #  "ae52dc001@smtp-brevo.com"
+#)
+
+#EMAIL_HOST_PASSWORD = os.environ.get(
+ #   "EMAIL_HOST_PASSWORD",
+  #  "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 "
+#)
+
+#DEFAULT_FROM_EMAIL = "priyankapimpariya178@gmail.com"
 
 
 
