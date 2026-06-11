@@ -75,14 +75,29 @@ NabiTech Solution
 
         email.attach_alternative(html_content, "text/html")
 
-
         import traceback
+        import socket
 
         try:
             print("EMAIL_HOST:", settings.EMAIL_HOST)
             print("EMAIL_PORT:", settings.EMAIL_PORT)
             print("EMAIL_USER:", settings.EMAIL_HOST_USER)
             print("About to send email...")
+
+            try:
+                ip = socket.gethostbyname(settings.EMAIL_HOST)
+                print("Resolved IP:", ip)
+
+                sock = socket.create_connection(
+                    (settings.EMAIL_HOST, settings.EMAIL_PORT),
+                    timeout=5
+                )
+
+                print("SMTP Connection Success")
+                sock.close()
+
+            except Exception as e:
+                print("SMTP Connection Failed:", e)
 
             email.send(fail_silently=False)
 
