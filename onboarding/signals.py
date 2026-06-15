@@ -12,53 +12,66 @@ def send_onboarding_email(sender, instance, created, **kwargs):
     if not created:
         return
 
+    # Generate username and password
     username, password = generate_credentials(
         instance.first_name,
         instance.last_name
     )
 
+    # Save credentials
     instance.username = username
     instance.password = password
     instance.save(update_fields=["username", "password"])
 
+    # Onboarding URL
     onboarding_link = (
         f"https://hr-onboarding-portal-6y3a.onrender.com/"
         f"onboarding/login/{instance.token}/"
     )
 
+    # HTML Email
     html_content = f"""
     <html>
-    <body>
+    <body style="font-family: Arial, Helvetica, sans-serif; font-size:15px; color:#333333; line-height:1.7;">
 
-    <p>Hi {instance.first_name},</p>
+        <p>Hi {instance.first_name},</p>
 
-    <p>Welcome to <b>NabiTech Solution</b>.</p>
+        <p>
+            Welcome to <strong>NabiTech Solution</strong> 👋
+        </p>
 
-    <p>Please complete your onboarding using the link below:</p>
+        <p>
+            Please complete your onboarding using the link below:
+        </p>
 
-    <p>
-        <a href="{onboarding_link}">
-            {onboarding_link}
-        </a>
-    </p>
+        <p>
+            <a href="{onboarding_link}">
+                {onboarding_link}
+            </a>
+        </p>
 
-    <p>
-        <b>Login Details</b><br><br>
+        <p>
+            <strong>Login Details:</strong><br><br>
 
-        Username: {username}<br>
-        Password: {password}
-    </p>
+            User ID: {username}<br>
+            Password: {password}
+        </p>
 
-    <p>
-        Please change your password after your first login.
-    </p>
+        <p>
+            For security reasons, please change your password after your first login.
+        </p>
 
-    <br>
+        <p>
+            If you need any assistance, feel free to reach out.
+        </p>
 
-    <p>
-        Regards,<br>
-        HR Team
-    </p>
+        <br>
+
+        <p>
+            Thanks &amp; Regards,<br>
+            <strong>HR Team</strong><br>
+            NabiTech Solution
+        </p>
 
     </body>
     </html>
@@ -86,12 +99,17 @@ def send_onboarding_email(sender, instance, created, **kwargs):
         "htmlContent": html_content,
     }
 
-    response = requests.post(
-        url,
-        json=payload,
-        headers=headers,
-        timeout=20,
-    )
+    try:
+        response = requests.post(
+            url,
+            json=payload,
+            headers=headers,
+            timeout=20,
+        )
 
-    print(response.status_code)
-    print(response.text)
+        print("Brevo Status:", response.status_code)
+        print("Brevo Response:", response.text)
+
+    except Exception as e:
+        print("Email sending failed:", str(e))
+
