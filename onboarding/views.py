@@ -280,7 +280,7 @@ def change_password(request, token):
                 candidate.password = new
                 candidate.save()
                 messages.success(request, "Password updated successfully")
-                return redirect('onboarding_form', token=token)
+                return redirect('personal_view', token=token)
 
     return render(request, 'onboarding/change_password.html', {
         'form': form,
